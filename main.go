@@ -28,18 +28,19 @@ var cur_y int
 func main() {
 	input := New(os.Stdin)
 
-	ClearScreen()
+	//ClearScreen()
 
 	cur_x = 1
 	cur_y = 3
 	last_x = cur_x
 	last_y = cur_y
 
-	fmt.Printf("\033[%d;%dH", cur_y, cur_x)
+	//fmt.Printf("\033[%d;%dH", cur_y, cur_x)
 	fmt.Printf("%c", '*')
 
 	for {
 
+		//asdy -> asdy
 		var last byte
 		b, found := input.Inkey()
 		if found {
@@ -52,30 +53,21 @@ func main() {
 				} else {
 					//log.Printf("key found: '%c' value=%d", last, last)
 					if last == 'w' {
-						cur_y--
+						fmt.Println("you pressed w")
 					} else if last == 's' {
-						cur_y++
+						fmt.Println("you pressed s")
 					} else if last == 'a' {
-						cur_x--
+						fmt.Println("you pressed a")
 					} else if last == 'd' {
-						cur_x++
+						fmt.Println("you pressed d")
 					}
 					break
 				}
 			}
-
-			//log.Printf("fresh")
-			time.Sleep(100 * time.Millisecond)
-
-			fmt.Printf("\033[%d;%dH", last_y, last_x)
-			fmt.Printf("%c", ' ')
-
-			fmt.Printf("\033[%d;%dH", cur_y, cur_x)
-			fmt.Printf("%c", '*')
-
-			last_x = cur_x
-			last_y = cur_y
 		}
+		fmt.Printf("fresh\n")
+		time.Sleep(100 * time.Millisecond)
+
 	}
 
 	log.Printf("done")
