@@ -29,7 +29,7 @@ func (q *Queue) Pop() (p *Point, err error) {
 	if q.isEmpty() {
 		fmt.Println("queue empty")
 		err = errors.New("queue empty")
-		return
+		return nil, err
 	}
 	p = q.pos[q.tail]
 	q.tail++
