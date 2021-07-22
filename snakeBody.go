@@ -18,6 +18,7 @@ type Queue struct {
 func (q *Queue) Push(p *Point) (err error) {
 	if q.isEmpty() {
 		q.resetQueue()
+		q.tail++
 	}
 	q.head++
 	q.count++
@@ -27,6 +28,7 @@ func (q *Queue) Push(p *Point) (err error) {
 
 func (q *Queue) Pop() (p *Point, err error) {
 	if q.isEmpty() {
+		q.resetQueue()
 		fmt.Println("queue empty")
 		err = errors.New("queue empty")
 		return nil, err
@@ -39,6 +41,7 @@ func (q *Queue) Pop() (p *Point, err error) {
 
 func (q *Queue) List() (err error) {
 	if q.isEmpty() {
+		q.resetQueue()
 		fmt.Println("queue empty")
 		err = errors.New("queue empty")
 		return
