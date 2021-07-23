@@ -17,7 +17,7 @@ type Queue struct {
 func (q *Queue) Push(p *Point) (err error) {
 	if q.isEmpty() {
 		q.resetQueue()
-		q.tail++
+		//q.tail++
 	}
 	q.count++
 	q.pos = append(q.pos, p)
