@@ -44,13 +44,17 @@ func UpdateScore() {
 }
 
 func main() {
+	game := NewGame(80, 30, 100) //width, height, fps
+	game.Run()
+	return
+
 	rand.Seed(time.Now().Unix())
 	input := New(os.Stdin)
 
 	ditu := NewMap(width, height)
 	ditu.Show()
 
-	snake := NewSnake()
+	snake := NewSnake(13)
 	GenerateFood()
 
 	for {
@@ -86,7 +90,8 @@ func main() {
 			}
 		}
 
-		if snake.Eat() {
+		snake.DirectionFilter()
+		if snake.Eat(food) {
 			for {
 				GenerateFood()
 				flag := 0
@@ -120,4 +125,5 @@ func main() {
 
 		time.Sleep(100 * time.Millisecond)
 	}
+
 }
