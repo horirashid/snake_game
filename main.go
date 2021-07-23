@@ -6,11 +6,10 @@ import (
 	"time"
 )
 
-var width int = 40
-var height int = 20
+var width int = 80
+var height int = 30
 
 func ClearScreen() {
-	fmt.Println()
 	for i := 0; i < width+2; i++ {
 		fmt.Printf("-")
 	}
@@ -28,11 +27,11 @@ func ClearScreen() {
 }
 
 func MoveHead(last_x int, last_y int, cur_x int, cur_y int) {
-	fmt.Printf("\033[%d;%dH", last_y, last_x)
+	/*fmt.Printf("\033[%d;%dH", last_y, last_x)
 	fmt.Printf("%c", ' ')
 
 	fmt.Printf("\033[%d;%dH", cur_y, cur_x)
-	fmt.Printf("%c", '*')
+	fmt.Printf("%c", '*')*/
 
 }
 
@@ -43,7 +42,7 @@ func isHitWall(cur_x int, cur_y int) bool {
 	if cur_x >= width+2 {
 		return true
 	}
-	if cur_y <= 2 {
+	if cur_y <= 1 {
 		return true
 	}
 	if cur_y >= height+5 {
@@ -57,18 +56,7 @@ func main() {
 
 	ClearScreen()
 
-	var last_x int
-	var last_y int
-	var cur_x int
-	var cur_y int
-
-	cur_x = 2
-	cur_y = 3
-	last_x = cur_x
-	last_y = cur_y
-
-	fmt.Printf("\033[%d;%dH", cur_y, cur_x)
-	fmt.Printf("%c", '*')
+	snake := NewSnake()
 
 	for {
 
@@ -85,29 +73,34 @@ func main() {
 				} else {
 					//log.Printf("key found: '%c' value=%d", last, last)
 					if last == 'w' {
-						cur_y--
+						snake.ChangeDirection('u')
+						//cur_y--
 					} else if last == 's' {
-						cur_y++
+						snake.ChangeDirection('d')
+						//cur_y++
 					} else if last == 'a' {
-						cur_x--
+						snake.ChangeDirection('l')
+						//cur_x--
 					} else if last == 'd' {
-						cur_x++
+						snake.ChangeDirection('r')
+						//cur_x++
+					} else if last == 'q' {
+						fmt.Printf("\033[%d;%dH", height+6, 0)
+						fmt.Println("Quit")
+						return
 					}
 					break
 				}
 			}
 		}
 
-		time.Sleep(100 * time.Millisecond)
-
-		MoveHead(last_x, last_y, cur_x, cur_y)
-		if isHitWall(cur_x, cur_y) {
-			fmt.Printf("\033[%d;%dH", height+6, 0)
+		snake.Move()
+		if snake.isHitWall() {
+			fmt.Printf("\033[%d;%dH", height+5, 0)
 			fmt.Println("Hit Wall!")
 			return
 		}
 
-		last_x = cur_x
-		last_y = cur_y
+		time.Sleep(100 * time.Millisecond)
 	}
 }

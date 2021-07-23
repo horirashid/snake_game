@@ -11,7 +11,6 @@ type Point struct {
 type Queue struct {
 	pos   []*Point
 	count int
-	tail  int
 	head  int
 }
 
@@ -19,7 +18,6 @@ func (q *Queue) Push(p *Point) (err error) {
 	if q.isEmpty() {
 		q.resetQueue()
 	}
-	q.head++
 	q.count++
 	q.pos = append(q.pos, p)
 	return
@@ -31,9 +29,12 @@ func (q *Queue) Pop() (p *Point, err error) {
 		err = errors.New("queue empty")
 		return nil, err
 	}
-	p = q.pos[q.tail]
-	q.tail++
+	p = q.pos[0]
+	for i := 0; i < q.count-1; i++ {
+		q.pos[i] = q.pos[i+1]
+	}
 	q.count--
+	q.pos = append(q.pos[:q.count-1], q.pos[q.count:]...)
 	return p, nil
 }
 
@@ -43,16 +44,14 @@ func (q *Queue) List() (err error) {
 		err = errors.New("queue empty")
 		return
 	}
-	for i := q.tail; i <= q.head; i++ {
+	for i := 0; i < q.count; i++ {
 		fmt.Printf("queue[%d]=%d\n", i, q.pos[i])
 	}
-	fmt.Println("end of queue")
 	return
 }
 
 func (q *Queue) resetQueue() {
 	q.head = -1
-	q.tail = -1
 	q.count = 0
 	q.pos = q.pos[:0]
 }
@@ -60,26 +59,32 @@ func (q *Queue) isEmpty() bool {
 	return q.count == 0
 }
 
-func main() {
-	p1 := &Point{5,5}
-	p2 := &Point{4,5}
-	p3 := &Point{3,5}
-	p4 := &Point{2,5}
+/*func main() {
+	p1 := &Point{5, 5}
+	p2 := &Point{4, 5}
+	p3 := &Point{3, 5}
+	p4 := &Point{2, 5}
 
 	q := &Queue{
-		pos:   []*Point{p1,p2},
-		head:  1,
+		pos:   []*Point{p1, p2},
 		count: 2,
-		tail:  0,
+		head:  0,
 	}
+
 	q.List()
+	fmt.Print("---push (3,5)\n")
 	q.Push(p3)
-	p,_ := q.Pop()
-	fmt.Printf("the popped value is: x=%d, y=%d\n",p.x, p.y)
 	q.List()
-	q.Push(p4)
+	fmt.Print("---pop\n")
 	q.Pop()
 	q.List()
+	fmt.Print("---push (2,5)\n")
+	q.Push(p4)
+	q.List()
+	fmt.Print("---pop\n")
+	q.Pop()
+	q.List()
+	fmt.Print("---reset\n")
 	q.resetQueue()
 	q.List()
-}
+}*/
