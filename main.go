@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"math/rand"
 	"os"
 	"time"
 )
@@ -9,31 +10,8 @@ import (
 var width int = 80
 var height int = 30
 
-func ClearScreen() {
-	for i := 0; i < width+2; i++ {
-		fmt.Printf("-")
-	}
-	fmt.Println()
-	for i := 0; i < height+2; i++ {
-		fmt.Print("|")
-		for j := 0; j < width; j++ {
-			fmt.Print(" ")
-		}
-		fmt.Println("|")
-	}
-	for i := 0; i < width+2; i++ {
-		fmt.Printf("-")
-	}
-}
-
-func MoveHead(last_x int, last_y int, cur_x int, cur_y int) {
-	/*fmt.Printf("\033[%d;%dH", last_y, last_x)
-	fmt.Printf("%c", ' ')
-
-	fmt.Printf("\033[%d;%dH", cur_y, cur_x)
-	fmt.Printf("%c", '*')*/
-
-}
+var food Point
+var score int = 0
 
 func isHitWall(cur_x int, cur_y int) bool {
 	if cur_x <= 1 {
@@ -51,20 +29,34 @@ func isHitWall(cur_x int, cur_y int) bool {
 	return false
 }
 
+func GenerateFood() {
+	food.x = rand.Intn(width-2) + 2
+	food.y = rand.Intn(height-2) + 2
+	fmt.Printf("\033[%d;%dH", food.y, food.x)
+	fmt.Printf("%c", asd)
+}
+
+func UpdateScore() {
+	fmt.Printf("\033[%d;%dH", 10, 100)
+	fmt.Printf("   ")
+	fmt.Printf("\033[%d;%dH", 10, 100)
+	fmt.Printf("%d", score)
+}
+
 func main() {
+	rand.Seed(time.Now().Unix())
 	input := New(os.Stdin)
 
-	ClearScreen()
+	ditu := NewMap(width, height)
+	ditu.Show()
 
 	snake := NewSnake()
+	GenerateFood()
 
 	for {
-
-		//asdy -> asdy
 		var last byte
 		b, found := input.Inkey()
 		if found {
-			//log.Printf("key found: '%c' value=%d", b, b)
 			last = b
 			for {
 				b, found := input.Inkey()
@@ -94,12 +86,37 @@ func main() {
 			}
 		}
 
+		if snake.Eat() {
+			for {
+				GenerateFood()
+				flag := 0
+				for _, j := range snake.body.pos[:len(snake.body.pos)-1] {
+					if food.x == j.x && food.y == j.y {
+						flag = 1
+						break
+					}
+				}
+				if flag == 0 {
+					break
+				}
+			}
+			score++
+		}
+		if snake.isEatSelf() {
+			fmt.Printf("\033[%d;%dH", height+5, 0)
+			fmt.Println("Eat Self!")
+			return
+		}
+
 		snake.Move()
-		if snake.isHitWall() {
+
+		if snake.isHitWall(ditu) {
 			fmt.Printf("\033[%d;%dH", height+5, 0)
 			fmt.Println("Hit Wall!")
 			return
 		}
+
+		UpdateScore()
 
 		time.Sleep(100 * time.Millisecond)
 	}
