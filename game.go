@@ -27,6 +27,7 @@ func NewGame(w int, h int, fps int) *Game {
 	}
 	game.snakes = append(game.snakes, NewSnake(13))
 	game.snakes = append(game.snakes, NewSnake(16))
+	//game.snakes = append(game.snakes, NewSnake(19))
 	/*game.snakes = append(game.snakes, NewSnake(18))
 	game.snakes = append(game.snakes, NewSnake(20))
 	game.snakes = append(game.snakes, NewSnake(22))
@@ -120,7 +121,17 @@ func (game *Game) Run() {
 					} else if game.cur_key == 'd' {
 						game.snakes[i].ChangeDirection('r')
 					}
-				} else {
+				} else if i == 2 {
+					if game.cur_key == 't' {
+						game.snakes[i].ChangeDirection('u')
+					} else if game.cur_key == 'g' {
+						game.snakes[i].ChangeDirection('d')
+					} else if game.cur_key == 'f' {
+						game.snakes[i].ChangeDirection('l')
+					} else if game.cur_key == 'h' {
+						game.snakes[i].ChangeDirection('r')
+					}
+				} else if i == 1 {
 					if game.cur_key == 'i' {
 						game.snakes[i].ChangeDirection('u')
 					} else if game.cur_key == 'k' {
@@ -169,14 +180,12 @@ func (game *Game) Run() {
 					fmt.Println("Hit Wall!")
 					return
 				}
-			}
-		}
 
-		for i := 0; i < len(game.snakes); i++ {
-			fmt.Printf("\033[%d;%dH", 10+i, 100)
-			fmt.Printf("len%d :     ", i+1)
-			fmt.Printf("\033[%d;%dH", 10+i, 106)
-			fmt.Printf("%d", game.snakes[i].body.count)
+				fmt.Printf("\033[%d;%dH", 10+i, 100)
+				fmt.Printf("len%d :     ", i+1)
+				fmt.Printf("\033[%d;%dH", 10+i, 106)
+				fmt.Printf("%d", game.snakes[i].body.count)
+			}
 		}
 
 		time.Sleep(time.Duration(game.interval) * time.Millisecond)

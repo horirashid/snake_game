@@ -13,7 +13,7 @@ func NewSnake(ypos int) *Snake {
 		body:        &Queue{},
 		dir:         'r',
 		temp_dir:    'r',
-		speed_scale: 6,
+		speed_scale: 8,
 	}
 
 	for i := 18; i <= 20; i++ {
