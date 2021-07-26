@@ -179,6 +179,11 @@ func (game *Game) Run() {
 	game.ED()
 }
 
+/**
+* function takes Snake type as a parameter
+* This way, we have access to all of the snake properties
+* we can show any other thing related to the snake.E
+ */
 func showGameStatus(players []*Snake) {
 	/*
 	   ╔════════════════╗
@@ -244,67 +249,4 @@ func showGameStatus(players []*Snake) {
 	fmt.Printf("\033[%d;%dH", screenRow, 95)
 	fmt.Printf("╚══════════════════╝")
 	screenRow++
-
-	// top line
-	/*fmt.Printf("\033[%d;%dH", 8, 95)
-	fmt.Printf("┌")
-	for i := 1; i < 25; i++ {
-		fmt.Printf("\033[%d;%dH", 8, 95+i)
-		if i != 13 {
-			fmt.Printf("─")
-		} else {
-			fmt.Printf("┬")
-		}
-
-	}
-	fmt.Printf("\033[%d;%dH", 8, 120)
-	fmt.Printf("┐")
-
-	// sides
-	for i := 0; i < 10; i++ {
-		if i == 1 {
-			fmt.Printf("\033[%d;%dH", 9+i, 95)
-			fmt.Printf("├")
-			for j := 1; j < 25; j++ {
-				fmt.Printf("\033[%d;%dH", 9+i, 95+j)
-				fmt.Printf("─")
-			}
-			fmt.Printf("\033[%d;%dH", 9+i, 120)
-			fmt.Printf("┤")
-			// fmt.Printf("\033[%d;%dH", 9+i, 115)
-			// fmt.Printf("|")
-		} else {
-			fmt.Printf("\033[%d;%dH", 9+i, 95)
-			fmt.Printf("|")
-			fmt.Printf("\033[%d;%dH", 9+i, 110)
-			fmt.Printf("|")
-			fmt.Printf("\033[%d;%dH", 9+i, 120)
-			fmt.Printf("|")
-		}
-
-	}
-
-	// player 1 and 2
-	for i := 0; i < len(game.snakes); i++ {
-		fmt.Printf("\033[%d;%dH", 9, 96+(i*13))
-		fmt.Printf("player%d ", i+1)
-	}
-	// score
-	for i := 0; i < len(game.snakes); i++ {
-		fmt.Printf("\033[%d;%dH", 11, 96+(i*13))
-		fmt.Printf("length :     ")
-		fmt.Printf("\033[%d;%dH", 11, 105+(i*13))
-		fmt.Printf("%d", game.snakes[i].body.count)
-	}
-
-	// bottom line
-	fmt.Printf("\033[%d;%dH", 18, 95)
-	fmt.Printf("└")
-	for i := 1; i < 20; i++ {
-		fmt.Printf("\033[%d;%dH", 18, 95+i)
-		fmt.Printf("─")
-	}
-	fmt.Printf("\033[%d;%dH", 18, 115)
-	fmt.Printf("┘")*/
-
 }
