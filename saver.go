@@ -15,10 +15,15 @@ type Saver struct {
 
 func (saver *Saver) Save(keys []string) {
 	keystr := ""
-	for _, i := range keys {
-		keystr = keystr + i + "\n"
+	/*for _, i := range keys {
+			keystr = keystr + i + "\n"
+	}*/
+	// fmt.Println("len : ", len(keys))
+	for i := 0; i < len(keys); i++ {
+		keystr += keys[i] + "\n"
 	}
 	content := []byte(keystr)
+	// fmt.Println(keystr)
 	err := ioutil.WriteFile("keymap.txt", content, 0644)
 	if err != nil {
 		panic(err)
@@ -51,6 +56,7 @@ func (saver *Saver) useNewReader(filename string) {
 		}
 		count++
 		line = strings.Replace(line, "\f", "", -1)
+		line = strings.Replace(line, "\n", "", -1)
 		saver.keys = append(saver.keys, line)
 	}
 }
@@ -63,3 +69,9 @@ func (saver *Saver) useNewReader(filename string) {
 
 // 存储
 // sa.Save([]string{"qwer", "tyui"})
+/*func main() {
+	sa := &Saver{}
+	k := sa.Load()
+	k[0] = "fuck"
+	sa.Save(k)
+}*/

@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"os"
+	"regexp"
 	"time"
 )
 
@@ -25,7 +26,7 @@ func NewGame(w int, h int, fps int) *Game {
 		interval:        1000 / fps,
 		t:               0,
 	}
-	game.snakes = append(game.snakes, NewSnake(13))
+	//game.snakes = append(game.snakes, NewSnake(13))
 	return game
 }
 
@@ -71,22 +72,37 @@ func (game *Game) Prepare() {
 	game.ditu.GenerateFood()
 }
 
-func (game *Game) Option() string {
+func (game *Game) Option() (string, string) {
 	root := NewNode(nil, nil, "root", "", "")
 	gamemode_node := NewNode(root, nil, "game mode", "", "")
 	setting_node := NewNode(root, nil, "setting", "", "")
+	history_note := NewNode(root, nil, "history", "2", "")
 	solo_node := NewNode(gamemode_node, nil, "solo", "0_0", "")
 	double_node := NewNode(gamemode_node, nil, "double", "0_1", "")
+	keymapping_node := NewNode(setting_node, nil, "keymapping", "", "")
+	body_char_node := NewNode(setting_node, nil, "body_char", "1_1", "")
+	fps_node := NewNode(setting_node, nil, "fps", "1_2", "")
+	snake_speed_node := NewNode(setting_node, nil, "snake_speed", "1_3", "")
+	snake1_node := NewNode(keymapping_node, nil, "snake1", "1_0_0", "haha")
+	snake2_node := NewNode(keymapping_node, nil, "snake2", "1_0_1", "")
 
 	root.next = append(root.next, gamemode_node)
 	root.next = append(root.next, setting_node)
+	root.next = append(root.next, history_note)
 	gamemode_node.next = append(gamemode_node.next, solo_node)
 	gamemode_node.next = append(gamemode_node.next, double_node)
+	setting_node.next = append(setting_node.next, keymapping_node)
+	setting_node.next = append(setting_node.next, body_char_node)
+	setting_node.next = append(setting_node.next, fps_node)
+	setting_node.next = append(setting_node.next, snake_speed_node)
+	keymapping_node.next = append(keymapping_node.next, snake1_node)
+	keymapping_node.next = append(keymapping_node.next, snake2_node)
 
 	index := 0
 	old_index := 0
 	cur_node := root //*/
 	option_id := ""
+	value := ""
 	for i := 0; i < len(cur_node.next); i++ {
 		fmt.Printf("  %s\t%s\n", cur_node.next[i].name, cur_node.next[i].value)
 	}
@@ -115,8 +131,6 @@ func (game *Game) Option() string {
 			fmt.Printf("\033[%d;%dH", index+1, 0)
 			fmt.Print(">")
 
-			old_index = index
-
 			if game.cur_key == 10 || game.cur_key == 127 {
 				if game.cur_key == 10 {
 					cur_node = cur_node.next[index]
@@ -133,16 +147,21 @@ func (game *Game) Option() string {
 				}
 				fmt.Printf("\033[%d;%dH", 1, 1)
 				for i := 0; i < len(cur_node.next); i++ {
-					fmt.Printf("%s\t%s\n", cur_node.next[i].name, cur_node.next[i].value)
+					fmt.Printf("  %s\t%s\n", cur_node.next[i].name, cur_node.next[i].value)
 				}
+				fmt.Printf("\033[%d;%dH", old_index+1, 0)
+				fmt.Print(" ")
+				fmt.Printf("\033[%d;%dH", index+1, 0)
+				fmt.Print(">")
 			}
 
 			option_id = cur_node.id
+			value = cur_node.value
 
 			if cur_node.next == nil {
 				break
 			}
-
+			old_index = index
 		}
 		time.Sleep(time.Duration(20) * time.Millisecond)
 	}
@@ -152,12 +171,29 @@ func (game *Game) Option() string {
 		fmt.Println("                                     ")
 	}
 	fmt.Printf("\033[%d;%dH", 0, 0)
-	return option_id
+	return option_id, value
 }
 
 func (game *Game) Run() {
-	option_id := game.Option()
-	fmt.Println(option_id)
+	option_id, value := game.Option()
+
+	is_match, _ := regexp.MatchString("1_0_", option_id)
+	if is_match {
+		idx := int(option_id[len(option_id)-1]) - 48
+		fmt.Println(idx)
+		saver := &Saver{}
+		keymap := saver.Load()
+		keymap[idx] = value
+		saver.Save(keymap)
+	}
+
+	is_match, _ = regexp.MatchString("0_", option_id)
+	if is_match {
+		cnt := int(option_id[len(option_id)-1]) - 48 + 1
+		for i := 0; i < cnt; i++ {
+			game.snakes = append(game.snakes, NewSnake(13+i))
+		}
+	}
 
 	game.OP()
 	game.Prepare()
