@@ -180,16 +180,84 @@ func (game *Game) Run() {
 					fmt.Println("Hit Wall!")
 					return
 				}
-
-				fmt.Printf("\033[%d;%dH", 10+i, 100)
-				fmt.Printf("len%d :     ", i+1)
-				fmt.Printf("\033[%d;%dH", 10+i, 106)
-				fmt.Printf("%d", game.snakes[i].body.count)
 			}
 		}
+		showGameStatus(game.snakes)
 
-		time.Sleep(time.Duration(game.interval) * time.Millisecond)
+		time.Sleep(time.Duration(game.interval) * time.Millisecond * 10)
 		game.t++
 	}
 	game.ED()
+}
+
+/**
+* function takes Snake type as a parameter
+* This way, we have access to all of the snake properties
+* we can show any other thing related to the snake.E
+ */
+func showGameStatus(players []*Snake) {
+	/*
+	   ╔════════════════╗
+	   ║  GAME STATUS   ║
+	   ╠════════════════╣
+	   ║ ** Player 1 ** ║
+	   ║ Score: 3       ║
+	   ║────────────────║
+	   ║ ** Player 2 ** ║
+	   ║ Score: 3       ║
+	   ╚════════════════╝
+	*/
+
+	// players := [2]int{3, 2}
+	// header
+	screenRow := 8
+	fmt.Printf("\033[%d;%dH", screenRow, 95)
+	fmt.Printf("╔══════════════════╗")
+	screenRow++
+
+	fmt.Printf("\033[%d;%dH", screenRow, 95)
+	fmt.Printf("║   GAME STATUS    ║")
+	screenRow++
+
+	fmt.Printf("\033[%d;%dH", screenRow, 95)
+	fmt.Printf("╠══════════════════╣")
+	screenRow++
+
+	// players
+	n := len(players)
+	for i := 0; i < n; i++ {
+
+		// player header
+		fmt.Printf("\033[%d;%dH", screenRow, 95)
+		fmt.Printf("║")
+
+		fmt.Printf("\033[%d;%dH", screenRow, 97)
+		fmt.Printf("** Player %d **", i)
+
+		fmt.Printf("\033[%d;%dH", screenRow, 114)
+		fmt.Printf("║")
+		screenRow++
+
+		// player score
+		fmt.Printf("\033[%d;%dH", screenRow, 95)
+		fmt.Printf("║")
+
+		fmt.Printf("\033[%d;%dH", screenRow, 97)
+		fmt.Printf("Score: %d", players[i].body.count)
+
+		fmt.Printf("\033[%d;%dH", screenRow, 114)
+		fmt.Printf("║")
+		screenRow++
+
+		//seperator
+		if n > 1 && i != n-1 {
+			fmt.Printf("\033[%d;%dH", screenRow, 95)
+			fmt.Printf("║──────────────────║")
+			screenRow++
+		}
+	}
+
+	fmt.Printf("\033[%d;%dH", screenRow, 95)
+	fmt.Printf("╚══════════════════╝")
+	screenRow++
 }
