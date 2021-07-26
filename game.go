@@ -171,16 +171,140 @@ func (game *Game) Run() {
 				}
 			}
 		}
+		showGameStatus(game.snakes)
 
-		for i := 0; i < len(game.snakes); i++ {
-			fmt.Printf("\033[%d;%dH", 10+i, 100)
-			fmt.Printf("len%d :     ", i+1)
-			fmt.Printf("\033[%d;%dH", 10+i, 106)
-			fmt.Printf("%d", game.snakes[i].body.count)
-		}
-
-		time.Sleep(time.Duration(game.interval) * time.Millisecond)
+		time.Sleep(time.Duration(game.interval) * time.Millisecond * 10)
 		game.t++
 	}
 	game.ED()
+}
+
+func showGameStatus(players []*Snake) {
+	/*
+	   ╔════════════════╗
+	   ║  GAME STATUS   ║
+	   ╠════════════════╣
+	   ║ ** Player 1 ** ║
+	   ║ Score: 3       ║
+	   ║────────────────║
+	   ║ ** Player 2 ** ║
+	   ║ Score: 3       ║
+	   ╚════════════════╝
+	*/
+
+	// players := [2]int{3, 2}
+	// header
+	screenRow := 8
+	fmt.Printf("\033[%d;%dH", screenRow, 95)
+	fmt.Printf("╔══════════════════╗")
+	screenRow++
+
+	fmt.Printf("\033[%d;%dH", screenRow, 95)
+	fmt.Printf("║   GAME STATUS    ║")
+	screenRow++
+
+	fmt.Printf("\033[%d;%dH", screenRow, 95)
+	fmt.Printf("╠══════════════════╣")
+	screenRow++
+
+	// players
+	n := len(players)
+	for i := 0; i < n; i++ {
+
+		// player header
+		fmt.Printf("\033[%d;%dH", screenRow, 95)
+		fmt.Printf("║")
+
+		fmt.Printf("\033[%d;%dH", screenRow, 97)
+		fmt.Printf("** Player %d **", i)
+
+		fmt.Printf("\033[%d;%dH", screenRow, 114)
+		fmt.Printf("║")
+		screenRow++
+
+		// player score
+		fmt.Printf("\033[%d;%dH", screenRow, 95)
+		fmt.Printf("║")
+
+		fmt.Printf("\033[%d;%dH", screenRow, 97)
+		fmt.Printf("Score: %d", players[i].body.count)
+
+		fmt.Printf("\033[%d;%dH", screenRow, 114)
+		fmt.Printf("║")
+		screenRow++
+
+		//seperator
+		if n > 1 && i != n-1 {
+			fmt.Printf("\033[%d;%dH", screenRow, 95)
+			fmt.Printf("║──────────────────║")
+			screenRow++
+		}
+	}
+
+	fmt.Printf("\033[%d;%dH", screenRow, 95)
+	fmt.Printf("╚══════════════════╝")
+	screenRow++
+
+	// top line
+	/*fmt.Printf("\033[%d;%dH", 8, 95)
+	fmt.Printf("┌")
+	for i := 1; i < 25; i++ {
+		fmt.Printf("\033[%d;%dH", 8, 95+i)
+		if i != 13 {
+			fmt.Printf("─")
+		} else {
+			fmt.Printf("┬")
+		}
+
+	}
+	fmt.Printf("\033[%d;%dH", 8, 120)
+	fmt.Printf("┐")
+
+	// sides
+	for i := 0; i < 10; i++ {
+		if i == 1 {
+			fmt.Printf("\033[%d;%dH", 9+i, 95)
+			fmt.Printf("├")
+			for j := 1; j < 25; j++ {
+				fmt.Printf("\033[%d;%dH", 9+i, 95+j)
+				fmt.Printf("─")
+			}
+			fmt.Printf("\033[%d;%dH", 9+i, 120)
+			fmt.Printf("┤")
+			// fmt.Printf("\033[%d;%dH", 9+i, 115)
+			// fmt.Printf("|")
+		} else {
+			fmt.Printf("\033[%d;%dH", 9+i, 95)
+			fmt.Printf("|")
+			fmt.Printf("\033[%d;%dH", 9+i, 110)
+			fmt.Printf("|")
+			fmt.Printf("\033[%d;%dH", 9+i, 120)
+			fmt.Printf("|")
+		}
+
+	}
+
+	// player 1 and 2
+	for i := 0; i < len(game.snakes); i++ {
+		fmt.Printf("\033[%d;%dH", 9, 96+(i*13))
+		fmt.Printf("player%d ", i+1)
+	}
+	// score
+	for i := 0; i < len(game.snakes); i++ {
+		fmt.Printf("\033[%d;%dH", 11, 96+(i*13))
+		fmt.Printf("length :     ")
+		fmt.Printf("\033[%d;%dH", 11, 105+(i*13))
+		fmt.Printf("%d", game.snakes[i].body.count)
+	}
+
+	// bottom line
+	fmt.Printf("\033[%d;%dH", 18, 95)
+	fmt.Printf("└")
+	for i := 1; i < 20; i++ {
+		fmt.Printf("\033[%d;%dH", 18, 95+i)
+		fmt.Printf("─")
+	}
+	fmt.Printf("\033[%d;%dH", 18, 115)
+	fmt.Printf("┘")*/
+
 }
