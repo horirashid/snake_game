@@ -44,5 +44,4 @@ func UpdateScore() {
 func main() {
 	game := NewGame(80, 30, 100) //width, height, fps
 	game.Run()
-	return
 }

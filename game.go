@@ -26,12 +26,6 @@ func NewGame(w int, h int, fps int) *Game {
 		t:               0,
 	}
 	game.snakes = append(game.snakes, NewSnake(13))
-	//game.snakes = append(game.snakes, NewSnake(16))
-	//game.snakes = append(game.snakes, NewSnake(19))
-	/*game.snakes = append(game.snakes, NewSnake(18))
-	game.snakes = append(game.snakes, NewSnake(20))
-	game.snakes = append(game.snakes, NewSnake(22))
-	game.snakes = append(game.snakes, NewSnake(24))*/
 	return game
 }
 
@@ -45,23 +39,6 @@ func (game *Game) UpdateCurKey() {
 			if found {
 				last = b
 			} else {
-				//log.Printf("key found: '%c' value=%d", last, last)
-				/*if last == 'w' {
-					game.cur_key = 'w'
-					game.key_change_flag = 1
-				} else if last == 's' {
-					game.cur_key = 's'
-					game.key_change_flag = 1
-				} else if last == 'a' {
-					game.cur_key = 'a'
-					game.key_change_flag = 1
-				} else if last == 'd' {
-					game.cur_key = 'd'
-					game.key_change_flag = 1
-				} else if last == 'q' {
-					game.cur_key = 'q'
-					game.key_change_flag = 1
-				}*/
 				game.cur_key = last
 				game.key_change_flag = 1
 				break
@@ -94,7 +71,94 @@ func (game *Game) Prepare() {
 	game.ditu.GenerateFood()
 }
 
+func (game *Game) Option() string {
+	root := NewNode(nil, nil, "root", "", "")
+	gamemode_node := NewNode(root, nil, "game mode", "", "")
+	setting_node := NewNode(root, nil, "setting", "", "")
+	solo_node := NewNode(gamemode_node, nil, "solo", "0_0", "")
+	double_node := NewNode(gamemode_node, nil, "double", "0_1", "")
+
+	root.next = append(root.next, gamemode_node)
+	root.next = append(root.next, setting_node)
+	gamemode_node.next = append(gamemode_node.next, solo_node)
+	gamemode_node.next = append(gamemode_node.next, double_node)
+
+	index := 0
+	old_index := 0
+	cur_node := root //*/
+	option_id := ""
+	for i := 0; i < len(cur_node.next); i++ {
+		fmt.Printf("  %s\t%s\n", cur_node.next[i].name, cur_node.next[i].value)
+	}
+	fmt.Printf("\033[%d;%dH", index, 0)
+	fmt.Print(">")
+	for {
+		game.UpdateCurKey()
+		if game.key_change_flag == 1 {
+			game.key_change_flag = 0
+
+			if game.cur_key == 'w' {
+				index--
+				if index < 0 {
+					index = 0
+				}
+			}
+
+			if game.cur_key == 's' {
+				index++
+				if index >= len(cur_node.next) {
+					index = len(cur_node.next) - 1
+				}
+			}
+			fmt.Printf("\033[%d;%dH", old_index+1, 0)
+			fmt.Print(" ")
+			fmt.Printf("\033[%d;%dH", index+1, 0)
+			fmt.Print(">")
+
+			old_index = index
+
+			if game.cur_key == 10 || game.cur_key == 127 {
+				if game.cur_key == 10 {
+					cur_node = cur_node.next[index]
+					index = 0
+				}
+
+				if game.cur_key == 127 && cur_node.prev != nil {
+					cur_node = cur_node.prev //only if cur_node.prev != nil
+					index = 0
+				}
+				fmt.Printf("\033[%d;%dH", 1, 1)
+				for i := 0; i < 10; i++ {
+					fmt.Println("                                     ")
+				}
+				fmt.Printf("\033[%d;%dH", 1, 1)
+				for i := 0; i < len(cur_node.next); i++ {
+					fmt.Printf("%s\t%s\n", cur_node.next[i].name, cur_node.next[i].value)
+				}
+			}
+
+			option_id = cur_node.id
+
+			if cur_node.next == nil {
+				break
+			}
+
+		}
+		time.Sleep(time.Duration(20) * time.Millisecond)
+	}
+
+	fmt.Printf("\033[%d;%dH", 0, 0)
+	for i := 0; i < 10; i++ {
+		fmt.Println("                                     ")
+	}
+	fmt.Printf("\033[%d;%dH", 0, 0)
+	return option_id
+}
+
 func (game *Game) Run() {
+	option_id := game.Option()
+	fmt.Println(option_id)
+
 	game.OP()
 	game.Prepare()
 	for {
@@ -182,7 +246,7 @@ func (game *Game) Run() {
 				}
 			}
 		}
-		showGameStatus(game.snakes)
+		game.showGameStatus(game.snakes)
 
 		time.Sleep(time.Duration(game.interval) * time.Millisecond)
 		game.t++
@@ -195,7 +259,7 @@ func (game *Game) Run() {
 * This way, we have access to all of the snake properties
 * we can show any other thing related to the snake.E
  */
-func showGameStatus(players []*Snake) {
+func (game *Game) showGameStatus(players []*Snake) {
 	/*
 	   ╔════════════════╗
 	   ║  GAME STATUS   ║
