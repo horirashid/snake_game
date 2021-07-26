@@ -26,7 +26,7 @@ func NewGame(w int, h int, fps int) *Game {
 		t:               0,
 	}
 	game.snakes = append(game.snakes, NewSnake(13))
-	game.snakes = append(game.snakes, NewSnake(16))
+	//game.snakes = append(game.snakes, NewSnake(16))
 	//game.snakes = append(game.snakes, NewSnake(19))
 	/*game.snakes = append(game.snakes, NewSnake(18))
 	game.snakes = append(game.snakes, NewSnake(20))
@@ -184,7 +184,7 @@ func (game *Game) Run() {
 		}
 		showGameStatus(game.snakes)
 
-		time.Sleep(time.Duration(game.interval) * time.Millisecond * 10)
+		time.Sleep(time.Duration(game.interval) * time.Millisecond)
 		game.t++
 	}
 	game.ED()
