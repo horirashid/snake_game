@@ -177,22 +177,20 @@ func (game *Game) OP() {
 		&Point{50, 22},
 		&Point{51, 22},
 		&Point{52, 22},
-		&Point{56, 17},
-		&Point{46, 18},
-		&Point{56, 18},
-		&Point{47, 19},
-		&Point{55, 19},
-		&Point{48, 20},
-		&Point{54, 20},
-		&Point{49, 21},
-		&Point{53, 21},
-		&Point{50, 22},
-		&Point{52, 22},
-		&Point{51, 22},
+		&Point{54, 21},
+		&Point{55, 20},
+		&Point{56, 19},
+		&Point{57, 18},
+		&Point{57, 17},
+		&Point{57, 16},
+		&Point{57, 15},
+		&Point{57, 14},
+		&Point{57, 13},
+		&Point{56, 12},
+		&Point{55, 11},
+		&Point{54, 10},
 	}, 1)
 
-	
-	
 	snake_g.Show()
 	snake_r.Show()
 	snake_o.Show()
