@@ -93,8 +93,16 @@ func (snake *Snake) DirectionFilter() {
 	snake.dir = snake.temp_dir
 }
 
-func (snake *Snake) ChangeDirectionByKey(key rune) {
-
+func (snake *Snake) ChangeDirectionByKey(key byte) {
+	if key == snake.keymap[0] {
+		snake.ChangeDirection('u')
+	} else if key == snake.keymap[1] {
+		snake.ChangeDirection('d')
+	} else if key == snake.keymap[2] {
+		snake.ChangeDirection('l')
+	} else if key == snake.keymap[3] {
+		snake.ChangeDirection('r')
+	}
 }
 
 func (snake *Snake) ChangeDirection(new_direction rune) {

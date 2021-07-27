@@ -157,6 +157,8 @@ func (game *Game) OP() {
 		&Point{28, 22},
 	}, 1)
 	snake_r.head = &Point{38, 22}
+	snake_r.temp_dir = 'u'
+	snake_r.dir = 'u'
 
 	snake_o := NewSnakeByArray([]*Point{
 		&Point{52, 9},
@@ -190,10 +192,91 @@ func (game *Game) OP() {
 		&Point{55, 11},
 		&Point{54, 10},
 	}, 1)
+	snake_o.head = &Point{52, 9}
+
+	snake_u := NewSnakeByArray([]*Point{
+		&Point{61, 9},
+		&Point{61, 10},
+		&Point{61, 11},
+		&Point{61, 12},
+		&Point{61, 13},
+		&Point{61, 14},
+		&Point{61, 15},
+		&Point{61, 16},
+		&Point{61, 17},
+		&Point{61, 18},
+		&Point{61, 19},
+		&Point{61, 20},
+		&Point{61, 21},
+		&Point{61, 22},
+		&Point{62, 22},
+		&Point{63, 22},
+		&Point{64, 22},
+		&Point{65, 22},
+		&Point{66, 22},
+		&Point{67, 22},
+		&Point{68, 22},
+		&Point{69, 22},
+		&Point{70, 22},
+		&Point{71, 22},
+		&Point{71, 21},
+		&Point{71, 20},
+		&Point{71, 19},
+		&Point{71, 18},
+		&Point{71, 17},
+		&Point{71, 16},
+		&Point{71, 15},
+		&Point{71, 14},
+		&Point{71, 13},
+		&Point{71, 12},
+		&Point{71, 11},
+		&Point{71, 10},
+		&Point{71, 9},
+	}, 1)
+
+	snake_p := NewSnakeByArray([]*Point{
+		&Point{76, 15},
+		&Point{77, 15},
+		&Point{78, 15},
+		&Point{79, 15},
+		&Point{80, 15},
+		&Point{81, 15},
+		&Point{82, 15},
+		&Point{83, 15},
+		&Point{84, 14},
+		&Point{85, 13},
+		&Point{86, 12},
+		&Point{85, 11},
+		&Point{84, 10},
+		&Point{83, 9},
+		&Point{82, 9},
+		&Point{81, 9},
+		&Point{80, 9},
+		&Point{79, 9},
+		&Point{78, 9},
+		&Point{77, 9},
+		&Point{76, 9},
+		&Point{75, 9},
+		&Point{75, 10},
+		&Point{75, 11},
+		&Point{75, 12},
+		&Point{75, 13},
+		&Point{75, 14},
+		&Point{75, 15},
+		&Point{75, 16},
+		&Point{75, 17},
+		&Point{75, 18},
+		&Point{75, 19},
+		&Point{75, 20},
+		&Point{75, 21},
+		&Point{75, 22},
+	}, 1)
 
 	snake_g.Show()
 	snake_r.Show()
 	snake_o.Show()
+	snake_u.Show()
+	snake_p.Show()
 	for {
 		_, found := game.input.Inkey()
 		if found {
@@ -343,7 +426,13 @@ func (game *Game) Run() {
 	if is_match {
 		cnt := int(option_id[len(option_id)-1]) - 48 + 1
 		for i := 0; i < cnt; i++ {
-			game.snakes = append(game.snakes, NewSnake(13+i))
+			snake := NewSnake(13 + i)
+			if i == 0 {
+				snake.keymap = "wsad"
+			} else if i == 1 {
+				snake.keymap = "ikjl"
+			}
+			game.snakes = append(game.snakes, snake)
 		}
 	}
 
@@ -363,7 +452,7 @@ func (game *Game) Run() {
 
 			//change directions of snakes
 			for i := 0; i < len(game.snakes); i++ {
-				if i == 0 {
+				/*if i == 0 {
 					if game.cur_key == 'w' {
 						game.snakes[i].ChangeDirection('u')
 					} else if game.cur_key == 's' {
@@ -393,7 +482,8 @@ func (game *Game) Run() {
 					} else if game.cur_key == 'l' {
 						game.snakes[i].ChangeDirection('r')
 					}
-				}
+				}*/
+				game.snakes[i].ChangeDirectionByKey(game.cur_key)
 			}
 		}
 
