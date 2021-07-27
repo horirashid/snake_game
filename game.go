@@ -30,6 +30,15 @@ func NewGame(w int, h int, fps int) *Game {
 	return game
 }
 
+func (game *Game) Waitkey() {
+	for {
+		_, found := game.input.Inkey()
+		if found {
+			break
+		}
+	}
+}
+
 func (game *Game) UpdateCurKey() {
 	var last byte
 	b, found := game.input.Inkey()
@@ -50,12 +59,7 @@ func (game *Game) UpdateCurKey() {
 
 func (game *Game) OP() {
 	//fmt.Println("snake!  <press any key to start>")
-	for {
-		_, found := game.input.Inkey()
-		if found {
-			break
-		}
-	}
+	game.Waitkey()
 	for i := 0; i < 120+2; i++ {
 		fmt.Printf("-")
 	}
@@ -157,8 +161,6 @@ func (game *Game) OP() {
 		&Point{28, 22},
 	}, 1)
 	snake_r.head = &Point{38, 22}
-	snake_r.temp_dir = 'u'
-	snake_r.dir = 'u'
 
 	snake_o := NewSnakeByArray([]*Point{
 		&Point{52, 9},
@@ -233,6 +235,7 @@ func (game *Game) OP() {
 		&Point{71, 10},
 		&Point{71, 9},
 	}, 1)
+	snake_u.head = &Point{61, 9}
 
 	snake_p := NewSnakeByArray([]*Point{
 		&Point{76, 15},
@@ -271,22 +274,51 @@ func (game *Game) OP() {
 		&Point{75, 21},
 		&Point{75, 22},
 	}, 1)
+	snake_p.head = &Point{76, 15}
+
+	snake_5 := NewSnakeByArray([]*Point{
+		&Point{101, 9},
+		&Point{100, 9},
+		&Point{99, 9},
+		&Point{98, 9},
+		&Point{97, 9},
+		&Point{96, 9},
+		&Point{95, 9},
+		&Point{94, 9},
+		&Point{93, 9},
+		&Point{93, 10},
+		&Point{93, 11},
+		&Point{93, 12},
+		&Point{93, 13},
+		&Point{96, 14},
+		&Point{98, 15},
+		&Point{100, 16},
+		&Point{102, 17},
+		&Point{102, 18},
+		&Point{102, 19},
+		&Point{100, 20},
+		&Point{98, 21},
+		&Point{96, 22},
+		&Point{95, 22},
+	}, 1)
+	snake_5.head = &Point{101, 9}
 
 	snake_g.Show()
 	snake_r.Show()
 	snake_o.Show()
 	snake_u.Show()
 	snake_p.Show()
-	for {
-		_, found := game.input.Inkey()
-		if found {
-			break
-		}
-	}
+	snake_5.Show()
+
+	game.Waitkey()
+
 	for i := 0; i < 100; i++ {
 		snake_g.Move()
 		snake_r.Move()
 		snake_o.Move()
+		snake_u.Move()
+		snake_p.Move()
+		snake_5.Move()
 		time.Sleep(time.Duration(30) * time.Millisecond)
 	}
 	fmt.Printf("\033[%d;%dH", 1, 1)
@@ -438,6 +470,8 @@ func (game *Game) Run() {
 
 	game.OP()
 	game.Prepare()
+	game.Waitkey()
+
 	for {
 		game.UpdateCurKey()
 
@@ -452,37 +486,6 @@ func (game *Game) Run() {
 
 			//change directions of snakes
 			for i := 0; i < len(game.snakes); i++ {
-				/*if i == 0 {
-					if game.cur_key == 'w' {
-						game.snakes[i].ChangeDirection('u')
-					} else if game.cur_key == 's' {
-						game.snakes[i].ChangeDirection('d')
-					} else if game.cur_key == 'a' {
-						game.snakes[i].ChangeDirection('l')
-					} else if game.cur_key == 'd' {
-						game.snakes[i].ChangeDirection('r')
-					}
-				} else if i == 2 {
-					if game.cur_key == 't' {
-						game.snakes[i].ChangeDirection('u')
-					} else if game.cur_key == 'g' {
-						game.snakes[i].ChangeDirection('d')
-					} else if game.cur_key == 'f' {
-						game.snakes[i].ChangeDirection('l')
-					} else if game.cur_key == 'h' {
-						game.snakes[i].ChangeDirection('r')
-					}
-				} else if i == 1 {
-					if game.cur_key == 'i' {
-						game.snakes[i].ChangeDirection('u')
-					} else if game.cur_key == 'k' {
-						game.snakes[i].ChangeDirection('d')
-					} else if game.cur_key == 'j' {
-						game.snakes[i].ChangeDirection('l')
-					} else if game.cur_key == 'l' {
-						game.snakes[i].ChangeDirection('r')
-					}
-				}*/
 				game.snakes[i].ChangeDirectionByKey(game.cur_key)
 			}
 		}
