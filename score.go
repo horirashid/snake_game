@@ -6,8 +6,9 @@ import (
 	"io/ioutil"
 	"os"
 )
-// Players struct used to hold the array of players
-type Players struct {
+
+// SnakePlayers struct used to hold the array of players
+type SnakePlayers struct {
 	Players []Player `json:"players"`
 }
 
@@ -18,7 +19,7 @@ type Player struct {
 	HighestScore int    `json:"highest_score"`
 }
 
-func (p *Players) readJson() error {
+func (p *SnakePlayers) readJson() error {
 	jsonFile, err := os.Open("players.json")
 	if err != nil {
 		fmt.Println(err)
@@ -33,21 +34,24 @@ func (p *Players) readJson() error {
 	return err
 }
 
-func (p *Players) getHighestScore() ([]int, error) {
+func (p *SnakePlayers) getHighestScore() ([]int, error) {
 
-	p.readJson()
-	highestScore := []int {0,0}
+	err := p.readJson()
+	if err != nil {
+		return nil, err
+	}
+	highestScore := make([]int, len(p.Players))
 	for i := 0; i < len(p.Players); i++ {
-		//fmt.Println("Player Id: " + users.Players[i].Id)
-		//fmt.Println("Player Name: " + users.Players[i].Name)
-		//fmt.Println("Player HighestScore: " + strconv.Itoa(users.Players[i].HighestScore))
+		//fmt.Println("Player Id: " + users.SnakePlayers[i].Id)
+		//fmt.Println("Player Name: " + users.SnakePlayers[i].Name)
+		//fmt.Println("Player HighestScore: " + strconv.Itoa(users.SnakePlayers[i].HighestScore))
 		highestScore[i] = p.Players[i].HighestScore
 	}
 
 	return  highestScore, nil
 }
 
-func (p *Players) setHighestScore(playerId int, newScore int) error {
+func (p *SnakePlayers) setHighestScore(playerId int, newScore int) error {
 	p.readJson()
 	p.Players[playerId].HighestScore = newScore
 
@@ -61,10 +65,10 @@ func (p *Players) setHighestScore(playerId int, newScore int) error {
 	return err
 }
 func main() {
-	var p Players
+	var p SnakePlayers
 	err := p.setHighestScore(0, 6)
 	if err != nil {
-		fmt.Println(nil)
+		fmt.Println(err)
 	}
 	x, err := p.getHighestScore()
 	if err != nil {
