@@ -62,9 +62,14 @@ func (p *Players) setHighestScore(playerId int, newScore int) error {
 }
 func main() {
 	var p Players
-	p.setHighestScore(0, 6)
+	err := p.setHighestScore(0, 6)
+	if err != nil {
+		fmt.Println(nil)
+	}
 	x, err := p.getHighestScore()
-	if err == nil {
+	if err != nil {
+		fmt.Println(err)
+	} else {
 		fmt.Println(x)
 	}
 }
