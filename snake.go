@@ -14,6 +14,7 @@ func NewSnake(ypos int) *Snake {
 		dir:         'r',
 		temp_dir:    'r',
 		speed_scale: 8,
+		keymap:      "wsad",
 	}
 
 	for i := 18; i <= 20; i++ {
@@ -31,6 +32,7 @@ func NewSnakeByArray(body_pos []*Point, is_reverse int) *Snake {
 		dir:         'r',
 		temp_dir:    'r',
 		speed_scale: 8,
+		keymap:      "wsad",
 	}
 
 	for i := 0; i < len(body_pos); i++ {
@@ -50,6 +52,7 @@ type Snake struct {
 	dir         rune // u d l r
 	temp_dir    rune
 	speed_scale int
+	keymap      string
 }
 
 func (snake *Snake) Show() {
@@ -88,6 +91,10 @@ func (snake *Snake) DirectionFilter() {
 		return
 	}
 	snake.dir = snake.temp_dir
+}
+
+func (snake *Snake) ChangeDirectionByKey(key rune) {
+
 }
 
 func (snake *Snake) ChangeDirection(new_direction rune) {

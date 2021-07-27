@@ -157,8 +157,45 @@ func (game *Game) OP() {
 		&Point{28, 22},
 	}, 1)
 	snake_r.head = &Point{38, 22}
+
+	snake_o := NewSnakeByArray([]*Point{
+		&Point{52, 9},
+		&Point{51, 9},
+		&Point{50, 9},
+		&Point{48, 10},
+		&Point{47, 11},
+		&Point{46, 12},
+		&Point{45, 13},
+		&Point{45, 14},
+		&Point{45, 15},
+		&Point{45, 16},
+		&Point{45, 17},
+		&Point{45, 18},
+		&Point{46, 19},
+		&Point{47, 20},
+		&Point{48, 21},
+		&Point{50, 22},
+		&Point{51, 22},
+		&Point{52, 22},
+		&Point{56, 17},
+		&Point{46, 18},
+		&Point{56, 18},
+		&Point{47, 19},
+		&Point{55, 19},
+		&Point{48, 20},
+		&Point{54, 20},
+		&Point{49, 21},
+		&Point{53, 21},
+		&Point{50, 22},
+		&Point{52, 22},
+		&Point{51, 22},
+	}, 1)
+
+	
+	
 	snake_g.Show()
 	snake_r.Show()
+	snake_o.Show()
 	for {
 		_, found := game.input.Inkey()
 		if found {
@@ -168,6 +205,7 @@ func (game *Game) OP() {
 	for i := 0; i < 100; i++ {
 		snake_g.Move()
 		snake_r.Move()
+		snake_o.Move()
 		time.Sleep(time.Duration(30) * time.Millisecond)
 	}
 	fmt.Printf("\033[%d;%dH", 1, 1)

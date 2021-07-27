@@ -48,7 +48,7 @@ func (p *SnakePlayers) getHighestScore() ([]int, error) {
 		highestScore[i] = p.Players[i].HighestScore
 	}
 
-	return  highestScore, nil
+	return highestScore, nil
 }
 
 func (p *SnakePlayers) setHighestScore(playerId int, newScore int) error {
@@ -64,7 +64,8 @@ func (p *SnakePlayers) setHighestScore(playerId int, newScore int) error {
 	err = ioutil.WriteFile("players.json", byteValue, 0644)
 	return err
 }
-func main() {
+
+/*func main() {
 	var p SnakePlayers
 	err := p.setHighestScore(0, 6)
 	if err != nil {
@@ -76,4 +77,4 @@ func main() {
 	} else {
 		fmt.Println(x)
 	}
-}
+}*/
