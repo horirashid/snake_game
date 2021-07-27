@@ -424,7 +424,11 @@ func (game *Game) showGameStatus(players []*Snake) {
 	   ╚════════════════╝
 	*/
 
-	// players := [2]int{3, 2}
+	var p SnakePlayers
+	highest, err := p.getHighestScore()
+	if err != nil {
+		fmt.Printf("Error getting the highest score for players. Error output: %s", err)
+	}
 	// header
 	screenRow := 8
 	fmt.Printf("\033[%d;%dH", screenRow, 95)
@@ -460,6 +464,17 @@ func (game *Game) showGameStatus(players []*Snake) {
 
 		fmt.Printf("\033[%d;%dH", screenRow, 97)
 		fmt.Printf("Score: %d", players[i].body.count)
+
+		fmt.Printf("\033[%d;%dH", screenRow, 114)
+		fmt.Printf("║")
+		screenRow++
+
+		// player highest score
+		fmt.Printf("\033[%d;%dH", screenRow, 95)
+		fmt.Printf("║")
+
+		fmt.Printf("\033[%d;%dH", screenRow, 97)
+		fmt.Printf("Highest Score: %d", highest[i])
 
 		fmt.Printf("\033[%d;%dH", screenRow, 114)
 		fmt.Printf("║")
