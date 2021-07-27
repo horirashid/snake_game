@@ -312,14 +312,14 @@ func (game *Game) OP() {
 
 	game.Waitkey()
 
-	for i := 0; i < 100; i++ {
+	for i := 0; i < 250; i++ {
 		snake_g.Move()
 		snake_r.Move()
 		snake_o.Move()
 		snake_u.Move()
 		snake_p.Move()
 		snake_5.Move()
-		time.Sleep(time.Duration(30) * time.Millisecond)
+		time.Sleep(time.Duration(10) * time.Millisecond)
 	}
 	fmt.Printf("\033[%d;%dH", 1, 1)
 	fmt.Print("                                    ")
