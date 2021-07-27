@@ -49,18 +49,134 @@ func (game *Game) UpdateCurKey() {
 }
 
 func (game *Game) OP() {
-	fmt.Println("snake!  <press any key to start>")
+	//fmt.Println("snake!  <press any key to start>")
 	for {
 		_, found := game.input.Inkey()
 		if found {
 			break
 		}
 	}
-	fmt.Printf("\033[%d;%dH", 0, 0)
+	for i := 0; i < 120+2; i++ {
+		fmt.Printf("-")
+	}
+	fmt.Println()
+	for i := 0; i < 30+2; i++ {
+		fmt.Print("|")
+		for j := 0; j < 120; j++ {
+			fmt.Print(" ")
+		}
+		fmt.Println("|")
+	}
+	for i := 0; i < 120+2; i++ {
+		fmt.Printf("-")
+	}
+	snake_g := NewSnakeByArray([]*Point{
+		&Point{20, 10},
+		&Point{19, 9},
+		&Point{18, 9},
+		&Point{17, 9},
+		&Point{16, 9},
+		&Point{15, 9},
+		&Point{14, 9},
+		&Point{13, 9},
+		&Point{12, 9},
+		&Point{11, 10},
+		&Point{10, 11},
+		&Point{10, 12},
+		&Point{10, 13},
+		&Point{10, 14},
+		&Point{10, 15},
+		&Point{10, 16},
+		&Point{10, 17},
+		&Point{10, 18},
+		&Point{10, 19},
+		&Point{10, 20},
+		&Point{11, 21},
+		&Point{12, 22},
+		&Point{13, 22},
+		&Point{14, 22},
+		&Point{15, 22},
+		&Point{16, 22},
+		&Point{17, 22},
+		&Point{18, 22},
+		&Point{19, 22},
+		&Point{20, 21},
+		&Point{20, 20},
+		&Point{20, 19},
+		&Point{20, 18},
+		&Point{20, 17},
+		&Point{20, 16},
+		&Point{19, 16},
+		&Point{18, 16},
+		&Point{17, 16},
+		&Point{16, 16},
+	}, 1)
+	snake_g.head = &Point{20, 10}
+	snake_g.temp_dir = 'd'
+	snake_g.dir = 'd'
+
+	snake_r := NewSnakeByArray([]*Point{
+		&Point{38, 22},
+		&Point{37, 21},
+		&Point{36, 20},
+		&Point{35, 19},
+		&Point{34, 18},
+		&Point{33, 17},
+		&Point{32, 16},
+		&Point{32, 15},
+		&Point{33, 15},
+		&Point{34, 15},
+		&Point{35, 15},
+		&Point{36, 15},
+		&Point{37, 14},
+		&Point{38, 13},
+		&Point{38, 12},
+		&Point{38, 11},
+		&Point{37, 10},
+		&Point{36, 9},
+		&Point{35, 9},
+		&Point{34, 9},
+		&Point{33, 9},
+		&Point{32, 9},
+		&Point{31, 9},
+		&Point{30, 9},
+		&Point{29, 9},
+		&Point{28, 9},
+		&Point{28, 10},
+		&Point{28, 11},
+		&Point{28, 12},
+		&Point{28, 13},
+		&Point{28, 14},
+		&Point{28, 15},
+		&Point{28, 16},
+		&Point{28, 17},
+		&Point{28, 18},
+		&Point{28, 19},
+		&Point{28, 20},
+		&Point{28, 21},
+		&Point{28, 22},
+	}, 1)
+	snake_r.head = &Point{38, 22}
+	snake_g.Show()
+	snake_r.Show()
+	for {
+		_, found := game.input.Inkey()
+		if found {
+			break
+		}
+	}
+	for i := 0; i < 100; i++ {
+		snake_g.Move()
+		snake_r.Move()
+		time.Sleep(time.Duration(30) * time.Millisecond)
+	}
+	fmt.Printf("\033[%d;%dH", 1, 1)
+	fmt.Print("                                    ")
+	fmt.Printf("\033[%d;%dH", 1, 1)
 }
 
 func (game *Game) ED() {
-	fmt.Printf("\033[%d;%dH", game.ditu.height+5, 0)
+	fmt.Printf("\033[%d;%dH", game.ditu.height+5, 1)
 	fmt.Println("Quit")
 }
 

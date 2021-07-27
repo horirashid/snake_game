@@ -25,6 +25,25 @@ func NewSnake(ypos int) *Snake {
 	return s
 }
 
+func NewSnakeByArray(body_pos []*Point, is_reverse int) *Snake {
+	s := &Snake{
+		body:        &Queue{},
+		dir:         'r',
+		temp_dir:    'r',
+		speed_scale: 8,
+	}
+
+	for i := 0; i < len(body_pos); i++ {
+		if is_reverse == 0 {
+			s.body.Push(body_pos[i])
+		} else {
+			s.body.Push(body_pos[len(body_pos)-1-i])
+		}
+	}
+
+	return s
+}
+
 type Snake struct {
 	body        *Queue
 	head        *Point
