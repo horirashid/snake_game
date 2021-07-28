@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"regexp"
+	"strconv"
 	"time"
 )
 
@@ -342,6 +343,7 @@ func (game *Game) Select() (string, string) {
 	for {
 		option_id, value = game.Option()
 
+		//start game
 		if option_id[0] == '0' {
 			cnt := int(option_id[len(option_id)-1]) - 48 + 1
 			for i := 0; i < cnt; i++ {
@@ -370,8 +372,17 @@ func (game *Game) Option() (string, string) {
 	body_char_node := NewNode(setting_node, nil, "body_char", "1_1", "")
 	fps_node := NewNode(setting_node, nil, "fps", "1_2", "")
 	snake_speed_node := NewNode(setting_node, nil, "snake_speed", "1_3", "")
-	snake1_node := NewNode(keymapping_node, nil, "snake1", "1_0_0", "haha")
-	snake2_node := NewNode(keymapping_node, nil, "snake2", "1_0_1", "")
+
+	saver := &Saver{}
+	keymap := saver.Load()
+	//snake1_node := NewNode(keymapping_node, nil, "snake1", "1_0_0", keymap[0])
+	//snake2_node := NewNode(keymapping_node, nil, "snake2", "1_0_1", keymap[1])
+
+	var snake_nodes []*Node
+	for i := 0; i < len(keymap); i++ {
+		snake_node := NewNode(keymapping_node, nil, "snake"+strconv.Itoa(i), "1_0_"+strconv.Itoa(i), keymap[i])
+		snake_nodes = append(snake_nodes, snake_node)
+	}
 
 	root.next = append(root.next, gamemode_node)
 	root.next = append(root.next, setting_node)
@@ -382,8 +393,11 @@ func (game *Game) Option() (string, string) {
 	setting_node.next = append(setting_node.next, body_char_node)
 	setting_node.next = append(setting_node.next, fps_node)
 	setting_node.next = append(setting_node.next, snake_speed_node)
-	keymapping_node.next = append(keymapping_node.next, snake1_node)
-	keymapping_node.next = append(keymapping_node.next, snake2_node)
+	//keymapping_node.next = append(keymapping_node.next, snake1_node)
+	//keymapping_node.next = append(keymapping_node.next, snake2_node)
+	for i := 0; i < len(snake_nodes); i++ {
+		keymapping_node.next = append(keymapping_node.next, snake_nodes[i])
+	}
 
 	index := 0
 	old_index := 0
@@ -396,63 +410,128 @@ func (game *Game) Option() (string, string) {
 	fmt.Printf("\033[%d;%dH", index, 0)
 	fmt.Print(">")
 	for {
-		game.UpdateCurKey()
-		if game.key_change_flag == 1 {
-			game.key_change_flag = 0
+		for {
+			game.UpdateCurKey()
+			if game.key_change_flag == 1 {
+				game.key_change_flag = 0
 
-			if game.cur_key == 'w' {
-				index--
-				if index < 0 {
-					index = 0
-				}
-			}
-
-			if game.cur_key == 's' {
-				index++
-				if index >= len(cur_node.next) {
-					index = len(cur_node.next) - 1
-				}
-			}
-			fmt.Printf("\033[%d;%dH", old_index+1, 0)
-			fmt.Print(" ")
-			fmt.Printf("\033[%d;%dH", index+1, 0)
-			fmt.Print(">")
-
-			if game.cur_key == 10 || game.cur_key == 'q' {
-				if game.cur_key == 10 {
-					cur_node = cur_node.next[index]
-					index = 0
+				if game.cur_key == 'w' {
+					index--
+					if index < 0 {
+						index = 0
+					}
 				}
 
-				if game.cur_key == 'q' && cur_node.prev != nil {
-					cur_node = cur_node.prev //only if cur_node.prev != nil
-					index = 0
-				}
-				fmt.Printf("\033[%d;%dH", 1, 1)
-				for i := 0; i < 10; i++ {
-					fmt.Println("                                     ")
-				}
-				fmt.Printf("\033[%d;%dH", 1, 1)
-				for i := 0; i < len(cur_node.next); i++ {
-					fmt.Printf("  %s\t%s\n", cur_node.next[i].name, cur_node.next[i].value)
+				if game.cur_key == 's' {
+					index++
+					if index >= len(cur_node.next) {
+						index = len(cur_node.next) - 1
+					}
 				}
 				fmt.Printf("\033[%d;%dH", old_index+1, 0)
 				fmt.Print(" ")
 				fmt.Printf("\033[%d;%dH", index+1, 0)
 				fmt.Print(">")
+
+				if game.cur_key == 10 || game.cur_key == 'q' {
+					if game.cur_key == 10 {
+						cur_node = cur_node.next[index]
+						index = 0
+					}
+
+					if game.cur_key == 'q' && cur_node.prev != nil {
+						cur_node = cur_node.prev //only if cur_node.prev != nil
+						index = 0
+					}
+					fmt.Printf("\033[%d;%dH", 1, 1)
+					for i := 0; i < 10; i++ {
+						fmt.Println("                                     ")
+					}
+					fmt.Printf("\033[%d;%dH", 1, 1)
+					for i := 0; i < len(cur_node.next); i++ {
+						fmt.Printf("  %s\t%s\n", cur_node.next[i].name, cur_node.next[i].value)
+					}
+					fmt.Printf("\033[%d;%dH", old_index+1, 0)
+					fmt.Print(" ")
+					fmt.Printf("\033[%d;%dH", index+1, 0)
+					fmt.Print(">")
+				}
+
+				option_id = cur_node.id
+				value = cur_node.value
+
+				if cur_node.next == nil {
+					break
+				}
+				old_index = index
+			}
+			time.Sleep(time.Duration(20) * time.Millisecond)
+		}
+		//start game
+		if option_id[0] == '0' {
+			cnt := int(option_id[len(option_id)-1]) - 48 + 1
+			for i := 0; i < cnt; i++ {
+				snake := NewSnake(13 + i)
+				snake.keymap = snake_nodes[i].value
+				game.snakes = append(game.snakes, snake)
+			}
+			break
+		} else {
+			is_match, _ := regexp.MatchString("1_0_*", option_id)
+			//change keymapping
+			if is_match {
+				idx := option_id[4] - '0'
+				fmt.Printf("\033[%d;%dH", 1, 1)
+				for i := 0; i < 10; i++ {
+					fmt.Println("                                     ")
+				}
+				fmt.Printf("\033[%d;%dH", 1, 1)
+				x_idx := 1
+				key_mapping := ""
+				for {
+					game.UpdateCurKey()
+					if game.key_change_flag == 1 {
+						game.key_change_flag = 0
+						if game.cur_key == 10 {
+							break
+						}
+						if x_idx <= 4 {
+							fmt.Printf("\033[%d;%dH", 1, x_idx)
+							fmt.Printf("%c", game.cur_key)
+							key_mapping += string(game.cur_key)
+							x_idx++
+						}
+					}
+				}
+				saver := &Saver{}
+				keymap := saver.Load()
+				keymap[idx] = key_mapping
+				saver.Save(keymap)
+				/*if idx == 0 {
+					snake1_node.value = key_mapping
+				} else if idx == 1 {
+					snake2_node.value = key_mapping
+				}*/
+				snake_nodes[idx].value = key_mapping
 			}
 
-			option_id = cur_node.id
-			value = cur_node.value
-
-			if cur_node.next == nil {
-				break
+			cur_node = cur_node.prev //only if cur_node.prev != nil
+			index = 0
+			fmt.Printf("\033[%d;%dH", 1, 1)
+			for i := 0; i < 10; i++ {
+				fmt.Println("                                     ")
 			}
+			fmt.Printf("\033[%d;%dH", 1, 1)
+			for i := 0; i < len(cur_node.next); i++ {
+				fmt.Printf("  %s\t%s\n", cur_node.next[i].name, cur_node.next[i].value)
+			}
+			fmt.Printf("\033[%d;%dH", old_index+1, 0)
+			fmt.Print(" ")
+			fmt.Printf("\033[%d;%dH", index+1, 0)
+			fmt.Print(">")
 			old_index = index
 		}
-		time.Sleep(time.Duration(20) * time.Millisecond)
 	}
-
 	fmt.Printf("\033[%d;%dH", 0, 0)
 	for i := 0; i < 10; i++ {
 		fmt.Println("                                     ")
@@ -462,18 +541,7 @@ func (game *Game) Option() (string, string) {
 }
 
 func (game *Game) Run() {
-	option_id, value := game.Select()
-
-	is_match, _ := regexp.MatchString("1_0_", option_id)
-	if is_match {
-		idx := int(option_id[len(option_id)-1]) - 48
-		fmt.Println(idx)
-		saver := &Saver{}
-		keymap := saver.Load()
-		keymap[idx] = value
-		saver.Save(keymap)
-	}
-
+	game.Option()
 	game.OP()
 	game.Prepare()
 	game.Waitkey()
