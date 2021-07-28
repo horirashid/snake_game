@@ -26,7 +26,6 @@ func NewGame(w int, h int, fps int) *Game {
 		interval:        1000 / fps,
 		t:               0,
 	}
-	//game.snakes = append(game.snakes, NewSnake(13))
 	return game
 }
 
@@ -58,8 +57,6 @@ func (game *Game) UpdateCurKey() {
 }
 
 func (game *Game) OP() {
-	//fmt.Println("snake!  <press any key to start>")
-	game.Waitkey()
 	for i := 0; i < 120+2; i++ {
 		fmt.Printf("-")
 	}
@@ -339,6 +336,29 @@ func (game *Game) Prepare() {
 	game.ditu.GenerateFood()
 }
 
+func (game *Game) Select() (string, string) {
+	var option_id string
+	var value string
+	for {
+		option_id, value = game.Option()
+
+		if option_id[0] == '0' {
+			cnt := int(option_id[len(option_id)-1]) - 48 + 1
+			for i := 0; i < cnt; i++ {
+				snake := NewSnake(13 + i)
+				if i == 0 {
+					snake.keymap = "wsad"
+				} else if i == 1 {
+					snake.keymap = "ikjl"
+				}
+				game.snakes = append(game.snakes, snake)
+			}
+			break
+		}
+	}
+	return option_id, value
+}
+
 func (game *Game) Option() (string, string) {
 	root := NewNode(nil, nil, "root", "", "")
 	gamemode_node := NewNode(root, nil, "game mode", "", "")
@@ -398,13 +418,13 @@ func (game *Game) Option() (string, string) {
 			fmt.Printf("\033[%d;%dH", index+1, 0)
 			fmt.Print(">")
 
-			if game.cur_key == 10 || game.cur_key == 127 {
+			if game.cur_key == 10 || game.cur_key == 'q' {
 				if game.cur_key == 10 {
 					cur_node = cur_node.next[index]
 					index = 0
 				}
 
-				if game.cur_key == 127 && cur_node.prev != nil {
+				if game.cur_key == 'q' && cur_node.prev != nil {
 					cur_node = cur_node.prev //only if cur_node.prev != nil
 					index = 0
 				}
@@ -442,7 +462,7 @@ func (game *Game) Option() (string, string) {
 }
 
 func (game *Game) Run() {
-	option_id, value := game.Option()
+	option_id, value := game.Select()
 
 	is_match, _ := regexp.MatchString("1_0_", option_id)
 	if is_match {
@@ -452,20 +472,6 @@ func (game *Game) Run() {
 		keymap := saver.Load()
 		keymap[idx] = value
 		saver.Save(keymap)
-	}
-
-	is_match, _ = regexp.MatchString("0_", option_id)
-	if is_match {
-		cnt := int(option_id[len(option_id)-1]) - 48 + 1
-		for i := 0; i < cnt; i++ {
-			snake := NewSnake(13 + i)
-			if i == 0 {
-				snake.keymap = "wsad"
-			} else if i == 1 {
-				snake.keymap = "ikjl"
-			}
-			game.snakes = append(game.snakes, snake)
-		}
 	}
 
 	game.OP()
