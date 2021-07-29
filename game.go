@@ -562,6 +562,19 @@ func (game *Game) Option() (string, string) {
 				fmt.Print(speed)
 				fmt.Printf("\033[%d;%dH", 1, 1)
 
+				for {
+					game.UpdateCurKey()
+					if game.key_change_flag == 1 {
+						game.key_change_flag = 0
+						if game.cur_key == 10 {
+							break
+						}
+						fmt.Printf("\033[%d;%dH", 1, 1)
+						fmt.Printf("%c", game.cur_key)
+						body_char = rune(game.cur_key)
+					}
+				}
+
 				game.Waitkey()
 			}
 
