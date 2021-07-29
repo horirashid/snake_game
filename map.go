@@ -21,9 +21,9 @@ func NewMap(w int, h int) *Map {
 		width:      w,
 		height:     h,
 		wall_up:    1,
-		wall_down:  height + 4,
+		wall_down:  h + 4,
 		wall_left:  1,
-		wall_right: width + 2,
+		wall_right: w + 2,
 	}
 	rand.Seed(time.Now().Unix())
 	return m
@@ -50,5 +50,5 @@ func (m *Map) GenerateFood() {
 	m.food.x = rand.Intn(m.width-2) + 2
 	m.food.y = rand.Intn(m.height-2) + 2
 	fmt.Printf("\033[%d;%dH", m.food.y, m.food.x)
-	fmt.Printf("%c", asd)
+	fmt.Printf("%c", '*')
 }

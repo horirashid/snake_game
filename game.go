@@ -373,7 +373,7 @@ func (game *Game) Option() (string, string) {
 	snake_speed_node := NewNode(setting_node, nil, "snake_speed", "1_3", "")
 
 	saver := &Saver{}
-	keymap := saver.Load()
+	keymap := saver.GetKeyMap()
 	//snake1_node := NewNode(keymapping_node, nil, "snake1", "1_0_0", keymap[0])
 	//snake2_node := NewNode(keymapping_node, nil, "snake2", "1_0_1", keymap[1])
 
@@ -500,9 +500,9 @@ func (game *Game) Option() (string, string) {
 					}
 				}
 				saver := &Saver{}
-				keymap := saver.Load()
+				keymap := saver.GetKeyMap()
 				keymap[idx] = key_mapping
-				saver.Save(keymap)
+				saver.SaveKeyMap(keymap)
 				snake_nodes[idx].value = key_mapping
 			}
 
@@ -514,8 +514,13 @@ func (game *Game) Option() (string, string) {
 					fmt.Println("                                     ")
 				}
 				fmt.Printf("\033[%d;%dH", 1, 1)
-				body_char :=""
-				for{
+				//body_char := ""
+				saver := &Saver{}
+				body_char := saver.GetBody()
+				fmt.Printf("\033[%d;%dH", 1, 1)
+				fmt.Printf("%c", body_char)
+				for {
+
 					game.UpdateCurKey()
 					if game.key_change_flag == 1 {
 						game.key_change_flag = 0
@@ -524,7 +529,8 @@ func (game *Game) Option() (string, string) {
 						}
 						fmt.Printf("\033[%d;%dH", 1, 1)
 						fmt.Printf("%c", game.cur_key)
-						body_char = string(game.cur_key)
+						body_char = rune(game.cur_key)
+					}
 				}
 				fmt.Println("change body_char")
 				game.Waitkey()
@@ -550,7 +556,12 @@ func (game *Game) Option() (string, string) {
 					fmt.Println("                                     ")
 				}
 				fmt.Printf("\033[%d;%dH", 1, 1)
-				
+
+				saver := &Saver{}
+				speed := saver.GetSpeed()
+				fmt.Print(speed)
+				fmt.Printf("\033[%d;%dH", 1, 1)
+
 				game.Waitkey()
 			}
 
@@ -634,7 +645,7 @@ func (game *Game) Run() {
 							break
 						}
 					}
-					score++
+					//score++
 				}
 
 				if game.snakes[i].isEatSelf() {
@@ -646,7 +657,7 @@ func (game *Game) Run() {
 				game.snakes[i].Move()
 
 				if game.snakes[i].isHitWall(game.ditu) {
-					fmt.Printf("\033[%d;%dH", height+5, 0)
+					fmt.Printf("\033[%d;%dH", game.ditu.height+5, 0)
 					fmt.Println("Hit Wall!")
 					return
 				}

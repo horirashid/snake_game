@@ -50,12 +50,13 @@ type Snake struct {
 	temp_dir    rune
 	speed_scale int
 	keymap      string
+	body_char   byte
 }
 
 func (snake *Snake) Show() {
 	for _, j := range snake.body.pos[:len(snake.body.pos)] {
 		fmt.Printf("\033[%d;%dH", j.y, j.x)
-		fmt.Printf("%c", body_char.snake)
+		fmt.Printf("%c", snake.body_char)
 	}
 }
 
