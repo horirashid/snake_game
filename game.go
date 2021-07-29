@@ -16,6 +16,8 @@ type Game struct {
 	input           *Inkey
 	interval        int
 	t               int
+	body_char       byte
+	speed           int
 }
 
 func NewGame(w int, h int, fps int) *Game {
@@ -371,11 +373,8 @@ func (game *Game) Option() (string, string) {
 	keymapping_node := NewNode(setting_node, nil, "keymapping", "", "")
 	body_char_node := NewNode(setting_node, nil, "body_char", "1_1", "")
 	snake_speed_node := NewNode(setting_node, nil, "snake_speed", "1_3", "")
-
 	saver := &Saver{}
 	keymap := saver.GetKeyMap()
-	//snake1_node := NewNode(keymapping_node, nil, "snake1", "1_0_0", keymap[0])
-	//snake2_node := NewNode(keymapping_node, nil, "snake2", "1_0_1", keymap[1])
 
 	var snake_nodes []*Node
 	for i := 0; i < len(keymap); i++ {
@@ -468,6 +467,8 @@ func (game *Game) Option() (string, string) {
 			cnt := int(option_id[len(option_id)-1]) - 48 + 1
 			for i := 0; i < cnt; i++ {
 				snake := NewSnake(13 + i)
+				snake.speed_scale = game.speed
+				snake.body_char = '&'
 				snake.keymap = snake_nodes[i].value
 				game.snakes = append(game.snakes, snake)
 			}
@@ -514,13 +515,12 @@ func (game *Game) Option() (string, string) {
 					fmt.Println("                                     ")
 				}
 				fmt.Printf("\033[%d;%dH", 1, 1)
-				//body_char := ""
 				saver := &Saver{}
 				body_char := saver.GetBody()
 				fmt.Printf("\033[%d;%dH", 1, 1)
 				fmt.Printf("%c", body_char)
+				fmt.Printf("\033[%d;%dH", 1, 1)
 				for {
-
 					game.UpdateCurKey()
 					if game.key_change_flag == 1 {
 						game.key_change_flag = 0
@@ -532,8 +532,8 @@ func (game *Game) Option() (string, string) {
 						body_char = rune(game.cur_key)
 					}
 				}
-				fmt.Println("change body_char")
-				game.Waitkey()
+				game.body_char = game.cur_key
+				saver.SaveBody(body_char)
 			}
 
 			//2.change fps
@@ -602,7 +602,14 @@ func (game *Game) Option() (string, string) {
 	return option_id, value
 }
 
+func (game *Game) Init() {
+	saver := &Saver{}
+	game.speed = saver.GetSpeed()
+	game.body_char = byte(saver.GetBody())
+}
+
 func (game *Game) Run() {
+	game.Init()
 	game.Option()
 	game.OP()
 	game.Prepare()

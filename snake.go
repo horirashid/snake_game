@@ -30,6 +30,7 @@ func NewSnakeByArray(body_pos []*Point, is_reverse int) *Snake {
 		temp_dir:    'r',
 		speed_scale: 8,
 		keymap:      "wsad",
+		body_char:   '@',
 	}
 
 	for i := 0; i < len(body_pos); i++ {
