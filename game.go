@@ -58,20 +58,6 @@ func (game *Game) UpdateCurKey() {
 }
 
 func (game *Game) OP() {
-	for i := 0; i < 120+2; i++ {
-		fmt.Printf("-")
-	}
-	fmt.Println()
-	for i := 0; i < 30+2; i++ {
-		fmt.Print("|")
-		for j := 0; j < 120; j++ {
-			fmt.Print(" ")
-		}
-		fmt.Println("|")
-	}
-	for i := 0; i < 120+2; i++ {
-		fmt.Printf("-")
-	}
 	snake_g := NewSnakeByArray([]*Point{
 		&Point{20, 10},
 		&Point{19, 9},
@@ -319,8 +305,22 @@ func (game *Game) OP() {
 		snake_5.Move()
 		time.Sleep(time.Duration(10) * time.Millisecond)
 	}
+
 	fmt.Printf("\033[%d;%dH", 1, 1)
-	fmt.Print("                                    ")
+	for i := 0; i < 120+2; i++ {
+		fmt.Printf("-")
+	}
+	fmt.Println()
+	for i := 0; i < 30+2; i++ {
+		fmt.Print("|")
+		for j := 0; j < 120; j++ {
+			fmt.Print(" ")
+		}
+		fmt.Println("|")
+	}
+	for i := 0; i < 120+2; i++ {
+		fmt.Printf("-")
+	}
 	fmt.Printf("\033[%d;%dH", 1, 1)
 }
 
@@ -370,7 +370,6 @@ func (game *Game) Option() (string, string) {
 	double_node := NewNode(gamemode_node, nil, "double", "0_1", "")
 	keymapping_node := NewNode(setting_node, nil, "keymapping", "", "")
 	body_char_node := NewNode(setting_node, nil, "body_char", "1_1", "")
-	fps_node := NewNode(setting_node, nil, "fps", "1_2", "")
 	snake_speed_node := NewNode(setting_node, nil, "snake_speed", "1_3", "")
 
 	saver := &Saver{}
@@ -391,10 +390,7 @@ func (game *Game) Option() (string, string) {
 	gamemode_node.next = append(gamemode_node.next, double_node)
 	setting_node.next = append(setting_node.next, keymapping_node)
 	setting_node.next = append(setting_node.next, body_char_node)
-	setting_node.next = append(setting_node.next, fps_node)
 	setting_node.next = append(setting_node.next, snake_speed_node)
-	//keymapping_node.next = append(keymapping_node.next, snake1_node)
-	//keymapping_node.next = append(keymapping_node.next, snake2_node)
 	for i := 0; i < len(snake_nodes); i++ {
 		keymapping_node.next = append(keymapping_node.next, snake_nodes[i])
 	}
@@ -477,8 +473,8 @@ func (game *Game) Option() (string, string) {
 			}
 			break
 		} else {
+			//0.change keymapping
 			is_match, _ := regexp.MatchString("1_0_*", option_id)
-			//change keymapping
 			if is_match {
 				idx := option_id[4] - '0'
 				fmt.Printf("\033[%d;%dH", 1, 1)
@@ -507,14 +503,57 @@ func (game *Game) Option() (string, string) {
 				keymap := saver.Load()
 				keymap[idx] = key_mapping
 				saver.Save(keymap)
-				/*if idx == 0 {
-					snake1_node.value = key_mapping
-				} else if idx == 1 {
-					snake2_node.value = key_mapping
-				}*/
 				snake_nodes[idx].value = key_mapping
 			}
 
+			//1.change body_char
+			is_match, _ = regexp.MatchString("1_1", option_id)
+			if is_match {
+				fmt.Printf("\033[%d;%dH", 1, 1)
+				for i := 0; i < 10; i++ {
+					fmt.Println("                                     ")
+				}
+				fmt.Printf("\033[%d;%dH", 1, 1)
+				fmt.Println("change body_char")
+				game.Waitkey()
+			}
+
+			//2.change fps
+			is_match, _ = regexp.MatchString("1_2", option_id)
+			if is_match {
+				fmt.Printf("\033[%d;%dH", 1, 1)
+				for i := 0; i < 10; i++ {
+					fmt.Println("                                     ")
+				}
+				fmt.Printf("\033[%d;%dH", 1, 1)
+				fmt.Println("change fps")
+				game.Waitkey()
+			}
+
+			//3.change snake_speed
+			is_match, _ = regexp.MatchString("1_3", option_id)
+			if is_match {
+				fmt.Printf("\033[%d;%dH", 1, 1)
+				for i := 0; i < 10; i++ {
+					fmt.Println("                                     ")
+				}
+				fmt.Printf("\033[%d;%dH", 1, 1)
+				fmt.Println("change snake speed")
+				game.Waitkey()
+			}
+
+			//4.see history
+			if option_id == "2" {
+				fmt.Printf("\033[%d;%dH", 1, 1)
+				for i := 0; i < 10; i++ {
+					fmt.Println("                                     ")
+				}
+				fmt.Printf("\033[%d;%dH", 1, 1)
+				fmt.Println("see history")
+				game.Waitkey()
+			}
+
+			//return to prev
 			cur_node = cur_node.prev //only if cur_node.prev != nil
 			index = 0
 			fmt.Printf("\033[%d;%dH", 1, 1)

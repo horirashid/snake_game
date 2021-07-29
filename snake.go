@@ -4,10 +4,6 @@ import (
 	"fmt"
 )
 
-const (
-	asd = '@'
-)
-
 func NewSnake(ypos int) *Snake {
 	s := &Snake{
 		body:        &Queue{},
@@ -15,6 +11,7 @@ func NewSnake(ypos int) *Snake {
 		temp_dir:    'r',
 		speed_scale: 8,
 		keymap:      "wsad",
+		body_char:   '@',
 	}
 
 	for i := 18; i <= 20; i++ {
@@ -58,7 +55,7 @@ type Snake struct {
 func (snake *Snake) Show() {
 	for _, j := range snake.body.pos[:len(snake.body.pos)] {
 		fmt.Printf("\033[%d;%dH", j.y, j.x)
-		fmt.Printf("%c", asd)
+		fmt.Printf("%c", body_char.snake)
 	}
 }
 
@@ -76,7 +73,7 @@ func (snake *Snake) Move() {
 		snake.head = &Point{x: snake.head.x, y: snake.head.y + 1}
 	}
 	fmt.Printf("\033[%d;%dH", snake.head.y, snake.head.x)
-	fmt.Printf("%c", asd)
+	fmt.Printf("%c", snake.body_char)
 	snake.body.Push(snake.head)
 }
 
@@ -137,7 +134,7 @@ func (snake *Snake) isHitWall(m *Map) bool {
 
 func (snake *Snake) PrintPos(pos Point) {
 	fmt.Printf("\033[%d;%dH", pos.y, pos.x)
-	fmt.Printf("%c", asd)
+	fmt.Printf("%c", snake.body_char)
 }
 
 func (snake *Snake) Eat(fpos Point) bool {

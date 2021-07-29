@@ -10,7 +10,9 @@ import (
 )
 
 type Saver struct {
-	keys []string
+	keys   []string
+	body   rune
+	speend int
 }
 
 func (saver *Saver) Save(keys []string) {
@@ -30,12 +32,25 @@ func (saver *Saver) Save(keys []string) {
 	}
 }
 
-func (saver *Saver) Load() []string {
-	saver.useNewReader("keymap.txt")
+func (saver *Saver) GetKeyMap() []string {
+	all := saver.useNewReader("keymap.txt")
+	saver.keys=keymap[:len(all)-2]
 	return saver.keys
 }
 
-func (saver *Saver) useNewReader(filename string) {
+func (saver *Saver) GetBody() rune {
+	all := saver.useNewReader("keymap.txt")
+	saver.body=rune(keymap[len(all)-2])
+	return saver.body
+}
+
+func (saver *Saver) GetSpeen() rune {
+	all := saver.useNewReader("keymap.txt")
+	saver.body=rune(keymap[len(all)-2])
+	return saver.body
+}
+
+func (saver *Saver) useNewReader(filename string) []string {
 	var count int = 0
 
 	fin, error := os.OpenFile(filename, os.O_RDONLY, 0)
@@ -47,7 +62,7 @@ func (saver *Saver) useNewReader(filename string) {
 
 	/*create a Reader*/
 	rd := bufio.NewReader(fin)
-
+	strs:=[]string
 	/*read the file and stop when meet err or EOF*/
 	for {
 		line, err := rd.ReadString('\n')
@@ -57,8 +72,9 @@ func (saver *Saver) useNewReader(filename string) {
 		count++
 		line = strings.Replace(line, "\f", "", -1)
 		line = strings.Replace(line, "\n", "", -1)
-		saver.keys = append(saver.keys, line)
+		strs: = append(strs, line)
 	}
+	return strs
 }
 
 //初始化
