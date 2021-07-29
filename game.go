@@ -514,6 +514,18 @@ func (game *Game) Option() (string, string) {
 					fmt.Println("                                     ")
 				}
 				fmt.Printf("\033[%d;%dH", 1, 1)
+				body_char :=""
+				for{
+					game.UpdateCurKey()
+					if game.key_change_flag == 1 {
+						game.key_change_flag = 0
+						if game.cur_key == 10 {
+							break
+						}
+						fmt.Printf("\033[%d;%dH", 1, 1)
+						fmt.Printf("%c", game.cur_key)
+						body_char = string(game.cur_key)
+				}
 				fmt.Println("change body_char")
 				game.Waitkey()
 			}
@@ -538,7 +550,7 @@ func (game *Game) Option() (string, string) {
 					fmt.Println("                                     ")
 				}
 				fmt.Printf("\033[%d;%dH", 1, 1)
-				fmt.Println("change snake speed")
+				
 				game.Waitkey()
 			}
 
