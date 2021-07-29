@@ -3,5 +3,5 @@ git config --global user.email "wakeykang@gmail.com" # コミットログに残�
 git config --global core.pager "" # ページャーを「なし」．つまり標準出力を選択（標準は less）
 git add .
 echo 准备提交
-git commit -m "岳宇翔"
+git commit -m "WANKKKK_Update"
 git push -u origin develop
