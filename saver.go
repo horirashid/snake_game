@@ -44,9 +44,9 @@ func (saver *Saver) GetBody() rune {
 	return saver.body
 }
 
-func (saver *Saver) GetSpeen() rune {
+func (saver *Saver) GetSpeed() rune {
 	all := saver.useNewReader("keymap.txt")
-	saver.body=rune(keymap[len(all)-2])
+	saver.speed=rune(keymap[len(all)-2])
 	return saver.body
 }
 
