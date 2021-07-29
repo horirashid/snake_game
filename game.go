@@ -308,7 +308,7 @@ func (game *Game) OP() {
 		time.Sleep(time.Duration(10) * time.Millisecond)
 	}
 
-	fmt.Printf("\033[%d;%dH", 1, 1)
+	/*fmt.Printf("\033[%d;%dH", 1, 1)
 	for i := 0; i < 120+2; i++ {
 		fmt.Printf("-")
 	}
@@ -322,7 +322,7 @@ func (game *Game) OP() {
 	}
 	for i := 0; i < 120+2; i++ {
 		fmt.Printf("-")
-	}
+	}*/
 	fmt.Printf("\033[%d;%dH", 1, 1)
 }
 
@@ -562,6 +562,7 @@ func (game *Game) Option() (string, string) {
 				fmt.Print(speed)
 				fmt.Printf("\033[%d;%dH", 1, 1)
 
+				x_idx := 0
 				for {
 					game.UpdateCurKey()
 					if game.key_change_flag == 1 {
@@ -569,9 +570,9 @@ func (game *Game) Option() (string, string) {
 						if game.cur_key == 10 {
 							break
 						}
-						fmt.Printf("\033[%d;%dH", 1, 1)
+						fmt.Printf("\033[%d;%dH", 1, x_idx)
 						fmt.Printf("%c", game.cur_key)
-						body_char = rune(game.cur_key)
+						x_idx++
 					}
 				}
 
