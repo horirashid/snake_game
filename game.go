@@ -468,7 +468,7 @@ func (game *Game) Option() (string, string) {
 			for i := 0; i < cnt; i++ {
 				snake := NewSnake(13 + i)
 				snake.speed_scale = game.speed
-				snake.body_char = '&'
+				snake.body_char = game.body_char
 				snake.keymap = snake_nodes[i].value
 				game.snakes = append(game.snakes, snake)
 			}
@@ -532,7 +532,7 @@ func (game *Game) Option() (string, string) {
 						body_char = rune(game.cur_key)
 					}
 				}
-				game.body_char = game.cur_key
+				game.body_char = byte(body_char)
 				saver.SaveBody(body_char)
 			}
 
