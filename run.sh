@@ -1,4 +1,6 @@
 #! /bin/bash
+echo GAME START
+echo GOGOGO!!
 clear
 reset
 clear
