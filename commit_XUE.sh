@@ -3,4 +3,4 @@ git config --global user.email "setsumeihiroshi@gmail.com" # コミットログ�
 git config --global core.pager "" # ページャーを「なし」．つまり標準出力を選択（標準は less）
 git add .
 git commit -m "薛明昊_Commit"
-git push -u orgin develop
+git push -u origin develop
