@@ -562,7 +562,8 @@ func (game *Game) Option() (string, string) {
 				fmt.Print(speed)
 				fmt.Printf("\033[%d;%dH", 1, 1)
 
-				x_idx := 0
+				x_idx := 1
+				num := ""
 				for {
 					game.UpdateCurKey()
 					if game.key_change_flag == 1 {
@@ -570,13 +571,22 @@ func (game *Game) Option() (string, string) {
 						if game.cur_key == 10 {
 							break
 						}
-						fmt.Printf("\033[%d;%dH", 1, x_idx)
-						fmt.Printf("%c", game.cur_key)
-						x_idx++
+						if x_idx == 1 {
+							fmt.Println("                                     ")
+							fmt.Printf("\033[%d;%dH", 1, 1)
+						}
+						if x_idx < 4 {
+							if game.cur_key >= '0' && game.cur_key <= '9' {
+								fmt.Printf("\033[%d;%dH", 1, x_idx)
+								fmt.Printf("%c", game.cur_key)
+								x_idx++
+								num += string(game.cur_key)
+							}
+						}
 					}
 				}
-
-				game.Waitkey()
+				game.speed, _ = strconv.Atoi(num)
+				saver.SaveSpeed(game.speed)
 			}
 
 			//4.see history
