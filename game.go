@@ -323,7 +323,7 @@ func (game *Game) OP() {
 			if snake_r.dir == 'r' || snake_r.dir == 'l' {
 				snake_r.ChangeDirection('d')
 				snake_r.DirectionFilter()
-			} else if snake_u.dir == 'd' {
+			} else if snake_r.dir == 'd' {
 				if i%2 == 0 {
 					snake_r.ChangeDirection('r')
 				} else {
@@ -381,7 +381,7 @@ func (game *Game) OP() {
 			}
 		}
 
-		time.Sleep(time.Duration(10) * time.Millisecond)
+		time.Sleep(time.Duration(20) * time.Millisecond)
 	}
 	fmt.Printf("\033[%d;%dH", 1, 1)
 }
