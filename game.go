@@ -262,6 +262,8 @@ func (game *Game) OP() {
 		&Point{75, 22},
 	}, 1)
 	snake_p.head = &Point{76, 15}
+	snake_p.dir = 'd'
+	snake_p.temp_dir = 'd'
 
 	snake_5 := NewSnakeByArray([]*Point{
 		&Point{101, 9},
@@ -308,15 +310,78 @@ func (game *Game) OP() {
 		snake_p.Move()
 		snake_5.Move()
 		if i%(rand.Intn(10)+1) == 0 {
-			if snake_r.dir == 'r' {
+			if snake_g.dir == 'l' {
+				snake_g.ChangeDirection('u')
+				snake_g.DirectionFilter()
+			} else if snake_g.dir == 'd' || snake_g.dir == 'u' {
+				snake_g.ChangeDirection('l')
+				snake_g.DirectionFilter()
+			}
+		}
+
+		if i%(rand.Intn(10)+1) == 0 {
+			if snake_r.dir == 'r' || snake_r.dir == 'l' {
 				snake_r.ChangeDirection('d')
 				snake_r.DirectionFilter()
-			} else if snake_r.dir == 'd' {
-				snake_r.ChangeDirection('r')
+			} else if snake_u.dir == 'd' {
+				if i%2 == 0 {
+					snake_r.ChangeDirection('r')
+				} else {
+					snake_r.ChangeDirection('l')
+				}
 				snake_r.DirectionFilter()
 			}
 		}
-		time.Sleep(time.Duration(100) * time.Millisecond)
+
+		if i%(rand.Intn(10)+1) == 0 {
+			if snake_o.dir == 'r' {
+				snake_o.ChangeDirection('u')
+				snake_o.DirectionFilter()
+			} else if snake_o.dir == 'u' {
+				snake_o.ChangeDirection('r')
+				snake_o.DirectionFilter()
+			}
+		}
+
+		if i%(rand.Intn(10)+1) == 0 {
+			if snake_u.dir == 'r' || snake_u.dir == 'l' {
+				snake_u.ChangeDirection('d')
+				snake_u.DirectionFilter()
+			} else if snake_u.dir == 'd' {
+				if i%2 == 0 {
+					snake_u.ChangeDirection('r')
+				} else {
+					snake_u.ChangeDirection('l')
+				}
+				snake_u.DirectionFilter()
+			}
+		}
+
+		if i%(rand.Intn(10)+1) == 0 {
+			if snake_p.dir == 'r' || snake_p.dir == 'l' {
+				snake_p.ChangeDirection('d')
+				snake_p.DirectionFilter()
+			} else if snake_p.dir == 'd' {
+				if i%2 == 0 {
+					snake_p.ChangeDirection('r')
+				} else {
+					snake_p.ChangeDirection('l')
+				}
+				snake_p.DirectionFilter()
+			}
+		}
+
+		if i%(rand.Intn(10)+1) == 0 {
+			if snake_5.dir == 'r' {
+				snake_5.ChangeDirection('u')
+				snake_5.DirectionFilter()
+			} else if snake_5.dir == 'u' {
+				snake_5.ChangeDirection('r')
+				snake_5.DirectionFilter()
+			}
+		}
+
+		time.Sleep(time.Duration(10) * time.Millisecond)
 	}
 	fmt.Printf("\033[%d;%dH", 1, 1)
 }
