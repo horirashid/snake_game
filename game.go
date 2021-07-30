@@ -597,6 +597,7 @@ func (game *Game) Option() (string, string) {
 				}
 				fmt.Printf("\033[%d;%dH", 1, 1)
 
+				var p SnakePlayers
 				x, err := p.getHighestScore()
 				if err != nil {
 					fmt.Println("Error in reading the highest score")
@@ -688,7 +689,6 @@ func (game *Game) Run() {
 							break
 						}
 					}
-					//score++
 				}
 
 				if game.snakes[i].isEatSelf() {
@@ -734,11 +734,12 @@ func (game *Game) showGameStatus(players []*Snake) {
 
 	var p SnakePlayers
 	highest, err := p.getHighestScore()
+	screenRow := 8
 	if err != nil {
 		fmt.Printf("Error getting the highest score for players. Error output: %s", err)
 	}
 	// header
-	screenRow := 8
+
 	fmt.Printf("\033[%d;%dH", screenRow, 95)
 	fmt.Printf("╔══════════════════╗")
 	screenRow++
@@ -754,6 +755,10 @@ func (game *Game) showGameStatus(players []*Snake) {
 	// players
 	n := len(players)
 	for i := 0; i < n; i++ {
+
+		if players[i].body.count > highest[i] {
+			p.setHighestScore(i, players[i].body.count)
+		}
 
 		// player header
 		fmt.Printf("\033[%d;%dH", screenRow, 95)
