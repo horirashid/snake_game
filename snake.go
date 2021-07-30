@@ -74,8 +74,13 @@ func (snake *Snake) Move() {
 	} else if snake.dir == 'd' {
 		snake.head = &Point{x: snake.head.x, y: snake.head.y + 1}
 	}
-	fmt.Printf("\033[%d;%dH", snake.head.y, snake.head.x)
-	fmt.Printf("%c", snake.body_char)
+
+	if snake.head.x <= 1 || snake.head.x >= 120 || snake.head.y <= 1 || snake.head.y >= 30 {
+
+	} else {
+		fmt.Printf("\033[%d;%dH", snake.head.y, snake.head.x)
+		fmt.Printf("%c", snake.body_char)
+	}
 	snake.body.Push(snake.head)
 }
 

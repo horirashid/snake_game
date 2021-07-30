@@ -298,7 +298,7 @@ func (game *Game) OP() {
 
 	game.Waitkey()
 
-	for i := 0; i < 250; i++ {
+	for i := 0; i < 150; i++ {
 		snake_g.Move()
 		snake_r.Move()
 		snake_o.Move()
@@ -307,22 +307,6 @@ func (game *Game) OP() {
 		snake_5.Move()
 		time.Sleep(time.Duration(10) * time.Millisecond)
 	}
-
-	/*fmt.Printf("\033[%d;%dH", 1, 1)
-	for i := 0; i < 120+2; i++ {
-		fmt.Printf("-")
-	}
-	fmt.Println()
-	for i := 0; i < 30+2; i++ {
-		fmt.Print("|")
-		for j := 0; j < 120; j++ {
-			fmt.Print(" ")
-		}
-		fmt.Println("|")
-	}
-	for i := 0; i < 120+2; i++ {
-		fmt.Printf("-")
-	}*/
 	fmt.Printf("\033[%d;%dH", 1, 1)
 }
 
