@@ -32,7 +32,7 @@ func (saver *Saver) allSave() {
 
 	content := []byte(keystr)
 	// fmt.Println(keystr)
-	err := ioutil.WriteFile("keymap.txt", content, 0644)
+	err := ioutil.WriteFile("config.txt", content, 0644)
 	if err != nil {
 		panic(err)
 	}
@@ -56,20 +56,20 @@ func (saver *Saver) SaveSpeed(speed int) {
 }
 
 func (saver *Saver) GetKeyMap() []string {
-	all := saver.useNewReader("keymap.txt")
+	all := saver.useNewReader("config.txt")
 	saver.keys = all[:len(all)-2]
 	return saver.keys
 }
 
 func (saver *Saver) GetBody() rune {
-	all := saver.useNewReader("keymap.txt")
+	all := saver.useNewReader("config.txt")
 	k := []rune(all[len(all)-2])
 	saver.body = k[0]
 	return saver.body
 }
 
 func (saver *Saver) GetSpeed() int {
-	all := saver.useNewReader("keymap.txt")
+	all := saver.useNewReader("config.txt")
 	k := all[len(all)-1]
 	i, _ := strconv.Atoi(k)
 	saver.speed = i
@@ -81,7 +81,7 @@ func (saver *Saver) useNewReader(filename string) []string {
 
 	fin, error := os.OpenFile(filename, os.O_RDONLY, 0)
 	if error != nil {
-		fmt.Println("keymap.txt not found !!!")
+		fmt.Println("config.txt not found !!!")
 		panic(error)
 	}
 	defer fin.Close()
