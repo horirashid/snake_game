@@ -596,7 +596,19 @@ func (game *Game) Option() (string, string) {
 					fmt.Println("                                     ")
 				}
 				fmt.Printf("\033[%d;%dH", 1, 1)
-				fmt.Println("see history")
+
+				x, err := p.getHighestScore()
+				if err != nil {
+					fmt.Println("Error in reading the highest score")
+				} else {
+					fmt.Printf("\033[%d;%dH", 1, 1)
+					fmt.Println("** Highest Score Record **")
+					for i := 0; i < len(x); i++ {
+						fmt.Printf("\033[%d;%dH", i+2, 1)
+						fmt.Printf("Player %d: %d", i+1, x[i])
+					}
+
+				}
 				game.Waitkey()
 			}
 
