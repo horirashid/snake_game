@@ -299,10 +299,10 @@ func (game *Game) OP() {
 	snake_p.Show()
 	snake_5.Show()
 
-	time.Sleep(time.Duration(500) * time.Millisecond)
+	time.Sleep(time.Duration(1000) * time.Millisecond)
 	rand.Seed(time.Now().Unix())
 
-	for i := 0; i < 150; i++ {
+	for i := 0; i < 120; i++ {
 		snake_g.Move()
 		snake_r.Move()
 		snake_o.Move()
