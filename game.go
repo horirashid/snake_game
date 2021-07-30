@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"math/rand"
 	"os"
 	"regexp"
 	"strconv"
@@ -296,7 +297,8 @@ func (game *Game) OP() {
 	snake_p.Show()
 	snake_5.Show()
 
-	game.Waitkey()
+	time.Sleep(time.Duration(500) * time.Millisecond)
+	rand.Seed(time.Now().Unix())
 
 	for i := 0; i < 150; i++ {
 		snake_g.Move()
@@ -305,7 +307,16 @@ func (game *Game) OP() {
 		snake_u.Move()
 		snake_p.Move()
 		snake_5.Move()
-		time.Sleep(time.Duration(10) * time.Millisecond)
+		if i%(rand.Intn(10)+1) == 0 {
+			if snake_r.dir == 'r' {
+				snake_r.ChangeDirection('d')
+				snake_r.DirectionFilter()
+			} else if snake_r.dir == 'd' {
+				snake_r.ChangeDirection('r')
+				snake_r.DirectionFilter()
+			}
+		}
+		time.Sleep(time.Duration(100) * time.Millisecond)
 	}
 	fmt.Printf("\033[%d;%dH", 1, 1)
 }

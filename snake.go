@@ -75,7 +75,7 @@ func (snake *Snake) Move() {
 		snake.head = &Point{x: snake.head.x, y: snake.head.y + 1}
 	}
 
-	if snake.head.x <= 1 || snake.head.x >= 120 || snake.head.y <= 1 || snake.head.y >= 30 {
+	if snake.head.x <= 1 || snake.head.x >= 120 || snake.head.y <= 1 || snake.head.y >= 40 {
 
 	} else {
 		fmt.Printf("\033[%d;%dH", snake.head.y, snake.head.x)
